@@ -152,20 +152,21 @@ def osc_publish_time(extract_texts):
 def tx(xpath_obj):
     return ''.join(xpath_obj.extract()).strip()
 
-
-def updateImgSrc(domContent, host):
     '''
     更新 img 图片链接信息
-    @param domContent: 被处理的文本内容
+    @param domcontent: 被处理的文本内容
     @param host: 网站的路由
     '''
-    soup = BeautifulSoup(domContent, "html.parser")
+
+
+def updateimgsrc(domcontent, host):
+    soup = BeautifulSoup(domcontent, "html.parser")
     for src in soup.find_all('img'):
         src = urljoin(host, src)
-    return domContent.html()
+    return domcontent.html()
 
 
-def isContainKeywords(title):
+def iscontainkeywords(title):
     result = False
     with open("keywords.txt", "r") as f:
         for line in f.read().splitlines():

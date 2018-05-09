@@ -110,8 +110,5 @@ AUTOTHROTTLE_MAX_DELAY = 60
 # HTTPCACHE_IGNORE_HTTP_CODES = []
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
-LOG_FILE = "CreditCrawl.log"
-LOG_LEVEL = "DEBUG"
-
 XCRS_HOST = "localhost"
 XCRS_PORT = "8086"

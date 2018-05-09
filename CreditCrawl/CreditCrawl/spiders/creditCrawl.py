@@ -20,7 +20,6 @@ class CreditcrawlSpider(CrawlSpider):
     def __init__(self, rule):
         self.rule = rule
         self.name = rule["rulename"]
-        print ("-----", rule["allowed_domains"])
         self.allowed_domains = rule["allowed_domains"].split(",")
         self.start_urls = rule["start_urls"].split(",")
 
@@ -48,13 +47,13 @@ class CreditcrawlSpider(CrawlSpider):
         newsitem["title"] = title
 
         # 发布时间
-        pubtime = response.xpath(self.rule["datetime_xpath"]).extract()
+        pubtime = response.xpath(self.rule["datetime_xpath"])[0].extract()
         newsitem["datetime"] = pubtime
 
         # 链接
         newsitem["srcUrl"] = response.url
 
-        author = response.xpath(self.rule["author_xpath"]).extract()
+        author = response.xpath(self.rule["author_xpath"])[0].extract()
         newsitem["author"] = author
 
         content = response.xpath(self.rule["content_xpath"]).extract()
@@ -66,7 +65,7 @@ class CreditcrawlSpider(CrawlSpider):
         # 网站名称
         newsitem["siteName"] = self.rule["sitename"].encode("utf8")
         # 来源——抓取所得
-        src = response.xpath(self.rule["src_xpath"]).extract()
+        src = response.xpath(self.rule["src_xpath"])[0].extract()
         newsitem["src"] = src
         # 分类
         newsitem["summary"] = self.rule["summary"]

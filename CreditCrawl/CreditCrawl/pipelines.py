@@ -6,11 +6,8 @@
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
 
-import re
 import pymongo
-from items import CreditcrawlItem
-import myUtil
-import logging
+from tools import myUtil
 
 
 class CreditcrawlPipeline(object):
@@ -25,24 +22,24 @@ class CreditcrawlPipeline(object):
             mongo_db=crawler.settings.get('MONGO_DATABASE', 'xcrs_test')
         )
 
-        def open_spider(self, spider):
-            self.client = pymongo.MongoClient(self.mongo_uri)
-            self.db = self.client[self.mongo_db]
+    def open_spider(self, spider):
+        self.client = pymongo.MongoClient(self.mongo_uri)
+        self.db = self.client[self.mongo_db]
 
-        def close_spider(self, spider):
-            self.client.close()
+    def close_spider(self, spider):
+        self.client.close()
 
-        def process_item(self, item, spider):
-            document = dict(item)
+    def process_item(self, item, spider):
+        document = dict(item)
+        try:
+            self.db.info_detail.insert(doc_or_docs=document, continue_on_error=True)
+        except pymongo.errors.DuplicateKeyError:
+            pass
+        if document["isfilter"] == "是" and myUtil.iscontainkeywords(document['_id']):
             try:
-                self.db.info_detail.insert(doc_or_docs=document, continue_on_error=True)
+                self.db.info_detail4email.insert(doc_or_docs=document, continue_on_error=True)
             except pymongo.errors.DuplicateKeyError:
                 pass
-            if document["isfilter"] == "是" and myUtil.isContainKeywords(document['_id']):
-                try:
-                    self.db.info_detail4email.insert(doc_or_docs=document, continue_on_error=True)
-                except pymongo.errors.DuplicateKeyError:
-                    pass
-            else:
-                pass
-            return item
+        else:
+            pass
+        return item

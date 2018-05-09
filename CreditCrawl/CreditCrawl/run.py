@@ -8,22 +8,41 @@
 
 import csv
 import codecs
+import os
 from twisted.internet import reactor
 from scrapy.crawler import CrawlerRunner
-from scrapy.utils.project import get_project_settings
+# from scrapy.utils.project import get_project_settings
+from scrapy.settings import Settings
 from scrapy.utils.log import configure_logging
 from spiders.creditCrawl import CreditcrawlSpider
 import time
+import datetime
+import logging
 from conf.config import runsleep
+from conf.config import log_format, log_file, log_path, log_open
 
 
 def startcrawl():
     print "CreditcrawlSpider is started in ", time.strftime("%Y-%m-%d %H:%M:%S")
     reactor.callLater(runsleep, startcrawl)
-    settings = get_project_settings()
-    configure_logging(settings)
+    settings = Settings()
+
+    # 配置日志记录规则设置
+    configure_logging(install_root_handler=False)
+    # configure_logging()
+    # 初始化日志路径
+    if log_open is True:
+        settings.set("LOG_LEVEL", 'INFO')
+        logpath = datetime.datetime.now().strftime(log_path)
+        if not os.path.isdir(logpath):
+            os.makedirs(logpath)
+        logging.basicConfig(
+            filename=datetime.datetime.now().strftime('%s/%s_spider.log' % (logpath, log_file)),
+            format=log_format,
+            level=logging.INFO
+        )
     runner = CrawlerRunner(settings)
-    with codecs.open("SiteInfo.csv", 'rU', 'utf-8-sig') as f:
+    with codecs.open("maintain/SiteInfo.csv", 'rU', 'utf-8-sig') as f:
         rules = csv.DictReader(f)
         for rule in rules:
             print(rule['sitename'])

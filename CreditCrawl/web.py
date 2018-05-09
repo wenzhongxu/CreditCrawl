@@ -9,10 +9,10 @@
 from flask import Flask
 from flask import render_template
 from flask import request
-from CreditCrawl.SearchApi import search
-from CreditCrawl.NewsType import NewsType
-from CreditCrawl.SiteInfoCateConfig import SiteInfoCateconfig
-from CreditCrawl.CrawlXpath import CrawlXpath
+from search.SearchApi import search
+from maintain.NewsType import NewsType
+from maintain.SiteInfoCateConfig import SiteInfoCateconfig
+from maintain.CrawlXpath import CrawlXpath
 import logging
 
 app = Flask(__name__)

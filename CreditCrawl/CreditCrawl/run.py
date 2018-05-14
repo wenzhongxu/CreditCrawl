@@ -20,6 +20,9 @@ import datetime
 import logging
 from conf.config import runsleep
 from conf.config import log_format, log_file, log_path, log_open
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 
 def startcrawl():

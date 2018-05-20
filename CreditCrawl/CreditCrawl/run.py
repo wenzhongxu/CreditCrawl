@@ -11,7 +11,7 @@ import codecs
 import os
 from twisted.internet import reactor
 from scrapy.crawler import CrawlerRunner
-# from scrapy.utils.project import get_project_settings
+from scrapy.utils.project import get_project_settings
 from scrapy.settings import Settings
 from scrapy.utils.log import configure_logging
 from spiders.creditCrawl import CreditcrawlSpider
@@ -28,7 +28,7 @@ sys.setdefaultencoding('utf8')
 def startcrawl():
     print "CreditcrawlSpider is started in ", time.strftime("%Y-%m-%d %H:%M:%S")
     reactor.callLater(runsleep, startcrawl)
-    settings = Settings()
+    settings = get_project_settings()
 
     # 配置日志记录规则设置
     configure_logging(install_root_handler=False)

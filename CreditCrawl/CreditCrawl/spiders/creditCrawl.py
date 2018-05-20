@@ -12,6 +12,7 @@ from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 import re
 from datetime import datetime
+# from tools import myUtil
 
 
 class CreditcrawlSpider(CrawlSpider):
@@ -42,6 +43,7 @@ class CreditcrawlSpider(CrawlSpider):
 
         newsitem = CreditcrawlItem()
 
+        # 标题
         title = response.xpath(self.rule["title_xpath"])[0].extract()
         newsitem["_id"] = title
         newsitem["title"] = title
@@ -53,11 +55,14 @@ class CreditcrawlSpider(CrawlSpider):
         # 链接
         newsitem["srcUrl"] = response.url
 
-        author = response.xpath(self.rule["author_xpath"])[0].extract()
+        # 作者
+        author = response.xpath(self.rule["author_xpath"])[0].extract() if \
+            response.xpath(self.rule["author_xpath"]).__len__() > 0 else ""
         newsitem["author"] = author
 
+        # 内容
         content = response.xpath(self.rule["content_xpath"]).extract()
-        # content = updateImgSrc(content, response.url)
+        # content = myUtil.updateimgsrc(content, response.url)
         newsitem["content"] = content
 
         # 频道
@@ -65,7 +70,8 @@ class CreditcrawlSpider(CrawlSpider):
         # 网站名称
         newsitem["siteName"] = self.rule["sitename"].encode("utf8")
         # 来源——抓取所得
-        src = response.xpath(self.rule["src_xpath"])[0].extract()
+        src = response.xpath(self.rule["src_xpath"])[0].extract() if \
+            response.xpath(self.rule["src_xpath"]).__len__() > 0 else ""
         newsitem["src"] = src
         # 分类
         newsitem["summary"] = self.rule["summary"]

@@ -160,9 +160,10 @@ def tx(xpath_obj):
 
 
 def updateimgsrc(domcontent, host):
-    soup = BeautifulSoup(domcontent, "html.parser")
-    for src in soup.find_all('img'):
-        src = urljoin(host, src)
+    soup = BeautifulSoup(domcontent, "lxml")
+    imglist = soup.find_all('img')
+    for src in imglist:
+        src['src'] = urljoin(host, src)
     return domcontent.html()
 
 

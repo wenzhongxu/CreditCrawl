@@ -31,6 +31,7 @@ class CreditcrawlPipeline(object):
 
     def process_item(self, item, spider):
         document = dict(item)
+        print(document)
         try:
             self.db.info_detail.insert(doc_or_docs=document, continue_on_error=True)
         except pymongo.errors.DuplicateKeyError:

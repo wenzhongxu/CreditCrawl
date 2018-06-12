@@ -169,7 +169,7 @@ def updateimgsrc(domcontent, host):
 
 def iscontainkeywords(title):
     result = False
-    with open("keywords.txt", "r") as f:
+    with open("tools/keywords.txt", "r") as f:
         for line in f.read().splitlines():
             if line in title:
                 result = True

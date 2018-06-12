@@ -12,7 +12,6 @@ import os
 from twisted.internet import reactor
 from scrapy.crawler import CrawlerRunner
 from scrapy.utils.project import get_project_settings
-from scrapy.settings import Settings
 from scrapy.utils.log import configure_logging
 from spiders.creditCrawl import CreditcrawlSpider
 import time
@@ -20,9 +19,6 @@ import datetime
 import logging
 from conf.config import runsleep
 from conf.config import log_format, log_file, log_path, log_open
-import sys
-reload(sys)
-sys.setdefaultencoding('utf8')
 
 
 def startcrawl():
@@ -48,7 +44,7 @@ def startcrawl():
     with codecs.open("maintain/SiteInfo.csv", 'rU', 'utf-8-sig') as f:
         rules = csv.DictReader(f)
         for rule in rules:
-            print(rule['sitename'])
+            print(rule['sitename'].decode('utf-8').encode('gbk'))
             runner.crawl(CreditcrawlSpider, rule=rule)
 
 

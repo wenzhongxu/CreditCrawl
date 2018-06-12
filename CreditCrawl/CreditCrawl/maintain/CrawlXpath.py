@@ -7,7 +7,7 @@
 # @Software: PyCharm
 
 import pymongo
-import settings
+from CreditCrawl import settings
 import csv
 import codecs
 from flask import jsonify
@@ -33,8 +33,11 @@ class CrawlXpath(object):
         self.extract_from = req.args['objInfo[extract_from]'] if 'objInfo[extract_from]' in req.args else None
         self.title_xpath = req.args['objInfo[title_xpath]'] if 'objInfo[title_xpath]' in req.args else None
         self.src_xpath = req.args['objInfo[src_xpath]'] if 'objInfo[src_xpath]' in req.args else None
+        self.src_re = req.args['objInfo[src_re]'] if 'objInfo[src_re]' in req.args else None
         self.datetime_xpath = req.args['objInfo[datetime_xpath]'] if 'objInfo[datetime_xpath]' in req.args else None
+        self.datetime_re = req.args['objInfo[datetime_re]'] if 'objInfo[datetime_re]' in req.args else None
         self.author_xpath = req.args['objInfo[author_xpath]'] if 'objInfo[author_xpath]' in req.args else None
+        self.author_re = req.args['objInfo[author_re]'] if 'objInfo[author_re]' in req.args else None
         self.content_xpath = req.args['objInfo[content_xpath]'] if 'objInfo[content_xpath]' in req.args else None
         self.orgsrc = req.args['objInfo[orgsrc]'] if 'objInfo[orgsrc]' in req.args else None
         self.sitename = req.args['objInfo[siteName]'] if 'objInfo[siteName]' in req.args else None
@@ -57,8 +60,11 @@ class CrawlXpath(object):
             "extract_from": self.extract_from,
             "title_xpath": self.title_xpath,
             "src_xpath": self.src_xpath,
+            "src_re": self.src_re,
             "datetime_xpath": self.datetime_xpath,
+            "datetime_re": self.datetime_re,
             "author_xpath": self.author_xpath,
+            "author_re": self.author_re,
             "content_xpath": self.content_xpath,
             "orgsrc": self.orgsrc,
             "sitename": self.sitename,
@@ -104,7 +110,7 @@ class CrawlXpath(object):
     
     def updatecsvfile(self):
         datas = self.getxpathdbinfo()
-        with open('CreditCrawl/SiteInfo.csv', 'wb') as csvfileWriter:
+        with open('CreditCrawl/maintain/SiteInfo.csv', 'wb') as csvfileWriter:
             csvfileWriter.write(codecs.BOM_UTF8)
             writer = csv.writer(csvfileWriter)
             fieldlist = [
@@ -115,8 +121,11 @@ class CrawlXpath(object):
                 "extract_from",
                 "title_xpath",
                 "src_xpath",
+                "src_re",
                 "datetime_xpath",
+                "datetime_re",
                 "author_xpath",
+                "author_re",
                 "content_xpath",
                 "orgsrc",
                 "sitename",

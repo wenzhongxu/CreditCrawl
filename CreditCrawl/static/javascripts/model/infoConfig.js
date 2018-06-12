@@ -624,9 +624,12 @@
                 extract_from = "",
                 title_xpath = "",
                 datetime_xpath = "",
+                datetime_re = "",
                 author_xpath = "",
+                author_re = "",
                 content_xpath = "",
                 src_xpath = "",
+                src_re = "",
                 summary_guid = "",
                 sIsFilter = "",
                 sIsEnable = "";
@@ -664,9 +667,12 @@
                         extract_from = dataInfo[0]["extract_from"];
                         title_xpath = dataInfo[0]["title_xpath"];
                         datetime_xpath = dataInfo[0]["datetime_xpath"];
+                        datetime_re = dataInfo[0]["datetime_re"];
                         author_xpath = dataInfo[0]["author_xpath"];
+                        author_re = dataInfo[0]["author_re"];
                         content_xpath = dataInfo[0]["content_xpath"];
                         src_xpath = dataInfo[0]["src_xpath"];
+                        src_re = dataInfo[0]["src_re"];
                     }
                 }, function(msg) {
                     alert(msg);
@@ -685,9 +691,12 @@
                 "<div style='margin:5px'><label for='inpExtractFrom' style='margin-right: 15px;'>提取区域:</label><input style='width:300px' type='text' id='inpExtractFrom' value=" + extract_from + "></div>" +
                 "<div style='margin:5px'><label for='inpTitleXpath' style='margin-right: 15px;'>标题:</label><input style='width:300px' type='text' id='inpTitleXpath' value=" + title_xpath + "></div>" +
                 "<div style='margin:5px'><label for='inpDatetimeXpath' style='margin-right: 15px;'>日期:</label><input style='width:300px' type='text' id='inpDatetimeXpath' value=" + datetime_xpath + "></div>" +
+                "<div style='margin:5px'><label for='inpDatetimeReXpath' style='margin-right: 15px;'>日期规则:</label><input style='width:300px' type='text' id='inpDatetimeReXpath' value=" + datetime_re + "></div>" +
                 "<div style='margin:5px'><label for='inpAuthorXpath' style='margin-right: 15px;'>作者:</label><input style='width:300px' type='text' id='inpAuthorXpath' value=" + author_xpath + "></div>" +
+                "<div style='margin:5px'><label for='inpAuthorReXpath' style='margin-right: 15px;'>作者规则:</label><input style='width:300px' type='text' id='inpAuthorReXpath' value=" + author_re + "></div>" +
                 "<div style='margin:5px'><label for='inpContentXpath' style='margin-right: 15px;'>内容:</label><input style='width:300px' type='text' id='inpContentXpath' value=" + content_xpath + "></div>" +
-                "<div style='margin:5px'><label for='inpSrcXpath' style='margin-right: 15px;'>来源:</label><input style='width:300px' type='text' id='inpSrcXpath' value=" + src_xpath + "></div>";
+                "<div style='margin:5px'><label for='inpSrcXpath' style='margin-right: 15px;'>来源:</label><input style='width:300px' type='text' id='inpSrcXpath' value=" + src_xpath + "></div>" +
+                "<div style='margin:5px'><label for='inpSrcReXpath' style='margin-right: 15px;'>来源规则:</label><input style='width:300px' type='text' id='inpSrcReXpath' value=" + src_re + "></div>";
 
             $.dialog({
                 title: sTypeName,
@@ -701,8 +710,11 @@
                     var sExtractfrom = $("#inpExtractFrom").val();
                     var sTitlexpath = $("#inpTitleXpath").val();
                     var sSrcxpath = $("#inpSrcXpath").val();
+                    var sSrcre = $("#inpSrcReXpath").val();
                     var sDatetimexpath = $("#inpDatetimeXpath").val();
+                    var sDatetimere = $("#inpDatetimeReXpath").val();
                     var sAuthorxpath = $("#inpDatetimeXpath").val();
+                    var sAuthorre = $("#inpAuthorReXpath").val();
                     var sContentxpath = $("#inpContentXpath").val();
                     var param = {};
                     var sUrl = location.protocol + "//" + location.host + "/editxpath";
@@ -718,8 +730,11 @@
                                 extract_from: sExtractfrom,
                                 title_xpath: sTitlexpath,
                                 src_xpath: sSrcxpath,
+                                src_re: sSrcre,
                                 datetime_xpath: sDatetimexpath,
+                                datetime_re: sDatetimere,
                                 author_xpath: sAuthorxpath,
+                                author_re: sAuthorre,
                                 content_xpath: sContentxpath,
                                 orgsrc: orgsrc,
                                 siteName: sitename,

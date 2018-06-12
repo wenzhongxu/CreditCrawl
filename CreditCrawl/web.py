@@ -9,10 +9,10 @@
 from flask import Flask
 from flask import render_template
 from flask import request
-from search.SearchApi import search
-from maintain.NewsType import NewsType
-from maintain.SiteInfoCateConfig import SiteInfoCateconfig
-from maintain.CrawlXpath import CrawlXpath
+from CreditCrawl.search import SearchApi
+from CreditCrawl.maintain import NewsType
+from CreditCrawl.maintain import SiteInfoCateConfig
+from CreditCrawl.maintain import CrawlXpath
 import logging
 
 app = Flask(__name__)
@@ -35,7 +35,7 @@ def grapconfig():
 def do_search():
     # http://localhost:5000/search?begdate=2017-08-09&type=add
     if request.args:
-        results = search(request)
+        results = SearchApi.search(request)
         return results
     else:
         pass
@@ -48,7 +48,7 @@ def opernewstype():
         pbotype = request.args['pbotype'] if request.args['pbotype'] else None
         pbotypename = request.args['pbotypename'] if request.args['pbotypename'] else None
         opertype = request.args['opertype'] if request.args['opertype'] else None
-        doc = NewsType(pbotype, pbotypename, opertype)
+        doc = NewsType.NewsType(pbotype, pbotypename, opertype)
         return doc.opertype()
     else:
         pass
@@ -57,7 +57,7 @@ def opernewstype():
 @app.route('/config')
 def config():
     if request.args:
-        siteobj = SiteInfoCateconfig(request)
+        siteobj = SiteInfoCateConfig.SiteInfoCateconfig(request)
         results = siteobj.opersiteconfig(request)
         return results
     else:
@@ -72,7 +72,7 @@ def saveconfig():
 @app.route('/editxpath')
 def editxpath():
     if request.args:
-        xpathobj = CrawlXpath(request)
+        xpathobj = CrawlXpath.CrawlXpath(request)
         results = xpathobj.operxpath()
         return results
     else:

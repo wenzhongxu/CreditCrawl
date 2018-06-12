@@ -7,7 +7,7 @@
 # @Software: PyCharm
 
 import pymongo
-import settings
+from CreditCrawl import settings
 from flask import jsonify
 import json
 

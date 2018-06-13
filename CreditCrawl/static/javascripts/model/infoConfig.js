@@ -305,7 +305,7 @@
                 sortable: false,
                 width: 200,
                 editor: 'text'
-            },{
+            }, {
                 field: 'isEnable',
                 title: '是否启用',
                 sortable: false,
@@ -695,7 +695,7 @@
                 "<div style='margin:5px'><label for='inpAuthorXpath' style='margin-right: 15px;'>作者:</label><input style='width:300px' type='text' id='inpAuthorXpath' value=" + author_xpath + "></div>" +
                 "<div style='margin:5px'><label for='inpAuthorReXpath' style='margin-right: 15px;'>作者规则:</label><input style='width:300px' type='text' id='inpAuthorReXpath' value=" + author_re + "></div>" +
                 "<div style='margin:5px'><label for='inpContentXpath' style='margin-right: 15px;'>内容:</label><input style='width:300px' type='text' id='inpContentXpath' value=" + content_xpath + "></div>" +
-                "<div style='margin:5px'><label for='inpSrcXpath' style='margin-right: 15px;'>来源:</label><input style='width:300px' type='text' id='inpSrcXpath' value=" + src_xpath + "></div>" +
+                "<div style='margin:5px'><label for='inpSrcXpath' style='margin-right: 15px;'>来源:</label><input style='width:300px' type='text' id='inpSrcXpath'></div>" +
                 "<div style='margin:5px'><label for='inpSrcReXpath' style='margin-right: 15px;'>来源规则:</label><input style='width:300px' type='text' id='inpSrcReXpath' value=" + src_re + "></div>";
 
             $.dialog({
@@ -713,13 +713,13 @@
                     var sSrcre = $("#inpSrcReXpath").val();
                     var sDatetimexpath = $("#inpDatetimeXpath").val();
                     var sDatetimere = $("#inpDatetimeReXpath").val();
-                    var sAuthorxpath = $("#inpDatetimeXpath").val();
+                    var sAuthorxpath = $("#inpAuthorXpath").val();
                     var sAuthorre = $("#inpAuthorReXpath").val();
                     var sContentxpath = $("#inpContentXpath").val();
                     var param = {};
                     var sUrl = location.protocol + "//" + location.host + "/editxpath";
                     //判断是否都填全了
-                    if (sRulename && sAllowdomains && sStarturls && sAllowurl && sExtractfrom && sTitlexpath && sSrcxpath && sDatetimexpath && sAuthorxpath && sContentxpath) {
+                    if (sRulename && sAllowdomains && sStarturls && sAllowurl && sExtractfrom && sTitlexpath && sDatetimexpath && sContentxpath) {
                         param = {
                             type: "EditXPath",
                             objInfo: {

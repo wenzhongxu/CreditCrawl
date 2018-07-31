@@ -279,6 +279,9 @@
         initGrid: function() {
             var that = this;
             var colList = [{
+                field: 'ck',
+                checkbox: true
+            }, {
                 field: 'src',
                 title: '频道',
                 width: 100,
@@ -433,8 +436,8 @@
             }];
 
             this.dataStore.gridObj = $('#siteInfo').datagrid({
-                //checkOnSelect:false,
-                selectOnCheck: false,
+                checkOnSelect: true,
+                selectOnCheck: true,
                 nowrap: true,
                 striped: true,
                 //pageSize: 1,
@@ -443,23 +446,13 @@
                 idField: '_id',
                 columns: [colList],
                 rownumbers: true,
-                singleSelect: true,
+                singleSelect: false,
                 toolbar: toolbarList,
-                onClickRow: function(index) {
-                    /*
-                    if (that.dataStore.editIndex != index) {
-                        if (that.endEditing()) {
-                            var gridObj = that.dataStore.gridObj;
-                            gridObj.datagrid('selectRow', index).datagrid('beginEdit', index);
-                            that.dataStore.editIndex = index;
-                        } else {
-                            gridObj.datagrid('selectRow', that.dataStore.editIndex);
-                        }
-                    }
-                    */
-                },
                 onDblClickRow: function(index, row) {
                     that.showEditWin('mod');
+                },
+                onSelect: function(index, row){
+
                 }
             });
         },
@@ -642,7 +635,7 @@
                 sIsFilter = selectedRow.IsFilter;
                 sitename = selectedRow.siteName;
                 orgsrc = selectedRow.src;
-                allow_domains = selectedRow.site;
+                // allow_domains = selectedRow.site;
                 start_urls = selectedRow._id;
                 sIsEnable = selectedRow.isEnable;
                 sRemark = "<select style='width:300px' id='selRemark'>";
@@ -663,15 +656,16 @@
                 that.SendAjaxReq4Json(sUrl, param, function(dataInfo) {
                     if (dataInfo.length > 0) {
                         rulename = dataInfo[0]["rulename"];
-                        allow_url = dataInfo[0]["allow_url"]
-                        extract_from = dataInfo[0]["extract_from"];
-                        title_xpath = dataInfo[0]["title_xpath"];
-                        datetime_xpath = dataInfo[0]["datetime_xpath"];
+                        allow_url = dataInfo[0]["allow_url"];
+                        allow_domains = dataInfo[0]["allowed_domains"];
+                        extract_from = dataInfo[0]["extract_from"].replace(/\"/g,"&quot;");
+                        title_xpath = dataInfo[0]["title_xpath"].replace(/\"/g,"&quot;");
+                        datetime_xpath = dataInfo[0]["datetime_xpath"].replace(/\"/g,"&quot;");
                         datetime_re = dataInfo[0]["datetime_re"];
-                        author_xpath = dataInfo[0]["author_xpath"];
+                        author_xpath = dataInfo[0]["author_xpath"].replace(/\"/g,"&quot;");
                         author_re = dataInfo[0]["author_re"];
-                        content_xpath = dataInfo[0]["content_xpath"];
-                        src_xpath = dataInfo[0]["src_xpath"];
+                        content_xpath = dataInfo[0]["content_xpath"].replace(/\"/g,"&quot;");
+                        src_xpath = dataInfo[0]["src_xpath"].replace(/\"/g,"&quot;");
                         src_re = dataInfo[0]["src_re"];
                     }
                 }, function(msg) {
@@ -688,14 +682,14 @@
                 "<div style='margin:5px'><label style='margin-right: 15px;'>域名:</label><input style='width:300px' type='text' id='inpAllowDomains' value=" + allow_domains + "></div>" +
                 "<div style='margin:5px'><label style='margin-right: 15px;'>起始URL:</label><input style='width:300px' type='text' id='inpStartUrls' value=" + start_urls + "></div>" +
                 "<div style='margin:5px'><label for='inpAllowUrl' style='margin-right: 15px;'>链接规则:</label><input style='width:300px' type='text' id='inpAllowUrl' value=" + allow_url + "></div>" +
-                "<div style='margin:5px'><label for='inpExtractFrom' style='margin-right: 15px;'>提取区域:</label><input style='width:300px' type='text' id='inpExtractFrom' value=" + extract_from + "></div>" +
-                "<div style='margin:5px'><label for='inpTitleXpath' style='margin-right: 15px;'>标题:</label><input style='width:300px' type='text' id='inpTitleXpath' value=" + title_xpath + "></div>" +
-                "<div style='margin:5px'><label for='inpDatetimeXpath' style='margin-right: 15px;'>日期:</label><input style='width:300px' type='text' id='inpDatetimeXpath' value=" + datetime_xpath + "></div>" +
+                "<div style='margin:5px'><label for='inpExtractFrom' style='margin-right: 15px;'>提取区域:</label><input style='width:300px' type='text' id='inpExtractFrom' value=\"" + extract_from + "\"></div>" +
+                "<div style='margin:5px'><label for='inpTitleXpath' style='margin-right: 15px;'>标题:</label><input style='width:300px' type='text' id='inpTitleXpath' value=\"" + title_xpath + "\"></div>" +
+                "<div style='margin:5px'><label for='inpDatetimeXpath' style='margin-right: 15px;'>日期:</label><input style='width:300px' type='text' id='inpDatetimeXpath' value=\"" + datetime_xpath + "\"></div>" +
                 "<div style='margin:5px'><label for='inpDatetimeReXpath' style='margin-right: 15px;'>日期规则:</label><input style='width:300px' type='text' id='inpDatetimeReXpath' value=" + datetime_re + "></div>" +
-                "<div style='margin:5px'><label for='inpAuthorXpath' style='margin-right: 15px;'>作者:</label><input style='width:300px' type='text' id='inpAuthorXpath' value=" + author_xpath + "></div>" +
+                "<div style='margin:5px'><label for='inpAuthorXpath' style='margin-right: 15px;'>作者:</label><input style='width:300px' type='text' id='inpAuthorXpath' value=\"" + author_xpath + "\"></div>" +
                 "<div style='margin:5px'><label for='inpAuthorReXpath' style='margin-right: 15px;'>作者规则:</label><input style='width:300px' type='text' id='inpAuthorReXpath' value=" + author_re + "></div>" +
-                "<div style='margin:5px'><label for='inpContentXpath' style='margin-right: 15px;'>内容:</label><input style='width:300px' type='text' id='inpContentXpath' value=" + content_xpath + "></div>" +
-                "<div style='margin:5px'><label for='inpSrcXpath' style='margin-right: 15px;'>来源:</label><input style='width:300px' type='text' id='inpSrcXpath'></div>" +
+                "<div style='margin:5px'><label for='inpContentXpath' style='margin-right: 15px;'>内容:</label><input style='width:300px' type='text' id='inpContentXpath' value=\"" + content_xpath + "\"></div>" +
+                "<div style='margin:5px'><label for='inpSrcXpath' style='margin-right: 15px;'>来源:</label><input style='width:300px' type='text' id='inpSrcXpath' value=\"" + src_xpath + "\"></div>" +
                 "<div style='margin:5px'><label for='inpSrcReXpath' style='margin-right: 15px;'>来源规则:</label><input style='width:300px' type='text' id='inpSrcReXpath' value=" + src_re + "></div>";
 
             $.dialog({

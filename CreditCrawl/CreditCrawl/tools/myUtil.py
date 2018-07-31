@@ -8,13 +8,7 @@
 
 import re
 import sys
-import smtplib
 from contextlib import contextmanager
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.mime.image import MIMEImage
-import os.path
-import datetime
 from bs4 import BeautifulSoup
 from urlparse import urljoin
 
@@ -124,7 +118,8 @@ def session_scope(Session):
 
 
 def parse_text(extract_texts, rule_name, attr_name):
-    """xpath的提取方式
+    """
+    xpath的提取方式
     @param extract_texts: 被处理的文本数组
     @param rule_name: 规则名称
     @param attr_name: 属性名
@@ -139,7 +134,8 @@ pat4 = re.compile(r'\d{4}年\d{2}月\d{2}日')
 
 
 def osc_publish_time(extract_texts):
-    """发布时间的提取方式
+    """
+    发布时间的提取方式
     @param extract_texts: 被处理的文本数组
     """
     if extract_texts:
@@ -152,11 +148,12 @@ def osc_publish_time(extract_texts):
 def tx(xpath_obj):
     return ''.join(xpath_obj.extract()).strip()
 
-    '''
+
+'''
     更新 img 图片链接信息
     @param domcontent: 被处理的文本内容
     @param host: 网站的路由
-    '''
+'''
 
 
 def updateimgsrc(domcontent, host):
@@ -177,3 +174,79 @@ def iscontainkeywords(title):
             else:
                 result = False
         return result
+
+
+def smart2date(date_string):
+    """
+    时间解析字符串,转化成标准时间
+    如果解析失败,返回当前时间
+    样例:
+    2015/12/20 12:11:56
+    2015\12\20 12:11:56
+    2015-12-20 15:43:50
+    2015年12月20日 12时00分00秒
+    """
+    # re_data = r"(\d{1,4}[-|\/|年]\d{1,2}[-|\/|月]\d{1,2}[\s|日]+\\d{1,2}:\d{1,2}:\d{1,2})"
+    # re_data = re.compile(
+    # "(\d{1,4}[-|\/|年])(\d{1,2}[-|\/|月])(\d{1,2}[\s|日]+)(\d{1,2}[\:|时]+)(\d{1,2}[\:|分]+)(\d{1,2}[秒]?)"
+    # )
+    # re_data = re.compile("\d{1,4}[-|\/|年]\d{1,2}[-|\/|月]\d{1,2}[\s|日]+\d{1,2}[\:|时]+\d{1,2}[\:|分]+\d{1,2}[秒]?")
+
+    # 中文智能化匹配在python中受unicode影响所以用if条件分支处理
+    re_en = re.compile("(\d{1,4})[-\/](\d{1,2})[-\/](\d{1,2})[\s]+(\d{1,2}):(\d{1,2}):(\d{1,2})")
+    re_cn = re.compile(u"(\d{1,4})年(\d{1,2})月(\d{1,2})日.?(\d{1,2})时(\d{1,2})分(\d{1,2})秒")
+    re_d_en = re.compile("(\d{1,4})[-\/](\d{1,2})[-\/](\d{1,2})")
+    re_d_cn = re.compile(u"(\d{1,4})年(\d{1,2})月(\d{1,2})日")
+    match = re_en.search(date_string)
+    # 极其愚蠢的正则
+    if match:
+        date_str = match.group(0)
+    else:
+        match = re_cn.search(date_string)
+        if match:
+            date_str = match.group(0)
+        else:
+            match = re_d_en.search(date_string)
+            if match:
+                date_str = match.group(0)
+            else:
+                match = re_d_cn.search(date_string)
+                if match:
+                    date_str = match.group(0)
+                else:
+                    date_str = ""
+    # date_str = re.sub(
+    #     r'/(\d{4})[^\d]*?(\d{1,2})[^\d]*?(\d{1,2})([^\d]*?)(\d{1,2})?(:(\d{1,2}))?(:(\d{1,2}))?[^\d]*$/', '-',
+    #     date_str)
+    return date_str
+
+    # re_data = re.compile("\d{1,4}.+\d{1,2}.+\d{1,2}.+\d{1,2}[\:|时]+\d{1,2}[\:|分]+\d{1,2}秒?")
+    # match = re_data.search(date_string)
+    # if match:
+    #     print match.group()
+    # else:
+    #     print "None"
+
+
+if __name__ == '__main__':
+    print smart2date(u"2016年02月16日 10:09")
+    print smart2date(u"2016-02-16 17:30")
+    pass
+    print smart2date("2015年12月20日 12时00分00秒 中国")
+    print smart2date("2015-12-20 15:43:50")
+    re_data = re.compile(u"20\d{1,2}[-|/|\\|年]\d{1,2}[-|/|\\|月]\d{1,2}日?\s+\d{1,2}[:|时]\d{1,2}[:|分]\d{1,2}秒?")
+    re_data = re.compile("((\d{1,4})[-\/](\d{1,2})[-\/](\d{1,2})[\s]+(\d{1,2}):(\d{1,2}):(\d{1,2}))")
+    re_data = re.compile("((\d{1,4})年(\d{1,2})月(\d{1,2})日\s+(\d{1,2})时(\d{1,2})分(\d{1,2})秒)")
+    re_data = re.compile(u"((\d{1,4})[-\/年](\d{1,2})[-\/月](\d{1,2})[日\s]+(\d{1,2})[:时](\d{1,2})[:分](\d{1,2})[秒])")
+    # date_string = u"2015-12-20 15:43:50"
+    date_string = u"2015年12月20日 12时00分00秒 "
+    match = re_data.match(date_string)
+    if match:
+        print match.groups()
+    else:
+        print "None"
+    string = "2015年12月20日 12时00分00秒 "
+    if "年" in string and "月" in string and "日" in string:
+        print(1)
+    else:
+        print(0)

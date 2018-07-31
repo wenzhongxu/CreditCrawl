@@ -12,7 +12,8 @@ from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 import re
 from datetime import datetime
-# from tools import myUtil
+from tools import formatdate
+from tools import myUtil
 
 
 class CreditcrawlSpider(CrawlSpider):
@@ -44,34 +45,48 @@ class CreditcrawlSpider(CrawlSpider):
         newsitem = CreditcrawlItem()
 
         # 标题
-        title = response.xpath(self.rule["title_xpath"])[0].extract()
+        title = response.xpath(self.rule["title_xpath"]).extract_first()
         newsitem["_id"] = title
         newsitem["title"] = title
 
         # 发布时间
-        pubtime = response.xpath(self.rule["datetime_xpath"])[0].extract()
+        if self.rule["datetime_re"]:
+            pubtime = response.xpath(self.rule["datetime_xpath"]).re_first(self.rule["datetime_re"])
+        else:
+            pubtime = response.xpath(self.rule["datetime_xpath"]).extract_first()
+        # 发布时间处理成统一格式
+        pubtime = formatdate.DateFormatHelper().convertstandarddateformat(pubtime)
         newsitem["datetime"] = pubtime
 
         # 链接
         newsitem["srcUrl"] = response.url
 
         # 作者
-        author = response.xpath(self.rule["author_xpath"])[0].extract() if \
-            response.xpath(self.rule["author_xpath"]).__len__() > 0 else ""
+        if self.rule["author_re"]:
+            author = response.xpath(self.rule["author_xpath"]).re_first(self.rule["author_re"])
+        else:
+            author = response.xpath(self.rule["author_xpath"]).extract_first()
         newsitem["author"] = author
 
         # 内容
-        content = response.xpath(self.rule["content_xpath"]).extract()
-        # content = myUtil.updateimgsrc(content, response.url)
-        newsitem["content"] = content
+        content_temp = "".join([tt.strip() for tt in response.xpath(self.rule["content_xpath"]).extract()])
+        re_con_strong = re.compile(r'</strong>(\s*)<strong>')
+        content_temp = re_con_strong.sub(r'\1', content_temp)
+        re_start_strong = re.compile(r'<strong>', re.I)
+        content_temp = re_start_strong.sub('<p>', content_temp)
+        re_end_strong = re.compile(r'</strong>', re.I)
+        content_temp = re_end_strong.sub('</p>', content_temp)
+        newsitem['content'] = myUtil.filter_tags(content_temp)
 
         # 频道
         newsitem["orgSrc"] = self.rule["orgsrc"].encode("utf8")
         # 网站名称
         newsitem["siteName"] = self.rule["sitename"].encode("utf8")
         # 来源——抓取所得
-        src = response.xpath(self.rule["src_xpath"])[0].extract() if \
-            response.xpath(self.rule["src_xpath"]).__len__() > 0 else ""
+        if self.rule["src_re"]:
+            src = response.xpath(self.rule["src_xpath"]).re_first(self.rule["src_re"])
+        else:
+            src = response.xpath(self.rule["src_xpath"]).extract_first()
         newsitem["src"] = src
         # 分类
         newsitem["summary"] = self.rule["summary"]

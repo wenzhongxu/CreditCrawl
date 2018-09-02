@@ -1,4 +1,4 @@
-﻿(function() {
+﻿(function () {
     var infoConfig = {
         dataStore: {
             treeObj: {},
@@ -12,7 +12,7 @@
          * 初始化
          * @return {[type]} [description]
          */
-        init: function() {
+        init: function () {
             this.dataStore.docWidth = $(document).width();
             this.dataStore.docHeight = $(document).height();
             this.initTree();
@@ -24,7 +24,7 @@
          * 初始化分类树
          * @return {[type]} [description]
          */
-        initTree: function() {
+        initTree: function () {
             var that = this;
             var setting = {
                 data: {
@@ -34,14 +34,14 @@
                     }
                 },
                 callback: {
-                    onRightClick: function(event, treeId, treeNode) {
+                    onRightClick: function (event, treeId, treeNode) {
                         that.dataStore.treeObj.selectNode(treeNode);
                         $('#mm_p').menu('show', {
                             left: event.clientX,
                             top: event.clientY
                         });
                     },
-                    onClick: function(event, treeId, treeNode, clickFlag) {
+                    onClick: function (event, treeId, treeNode, clickFlag) {
                         var sSite = treeNode.site;
                         var gridObj = that.dataStore.gridObj;
                         //如果存在站点信息，则获取该站点下相关配置的网址信息
@@ -50,7 +50,7 @@
                                 type: "site",
                                 site: sSite
                             };
-                            that.SendAjaxReq4Json(sUrl, param, function(dataInfo) {
+                            that.SendAjaxReq4Json(sUrl, param, function (dataInfo) {
                                 if (dataInfo.state == "ok") {
                                     gridObj.datagrid('loadData', {
                                         total: dataInfo.objList.length,
@@ -59,7 +59,7 @@
                                 } else {
                                     alert(dataInfo.msg);
                                 }
-                            }, function(msgInfo) {
+                            }, function (msgInfo) {
                                 var s = msgInfo;
                             });
                         }
@@ -91,9 +91,9 @@
                 var s = msgInfo;
             }
         },
-        initEvent: function() {
+        initEvent: function () {
             var that = this;
-            $(".grap").live("click", function(e) {
+            $(".grap").live("click", function (e) {
                 var urlList = [],
                     dom = $(e.target),
                     sUrl = dom.attr("_id"),
@@ -112,21 +112,21 @@
         /**
          * 新增分类
          */
-        addCate: function() {
+        addCate: function () {
             this.operCate("add");
         },
         /**
          * 修改分类
          * @return {[type]} [description]
          */
-        modCate: function() {
+        modCate: function () {
             this.operCate("mod");
         },
         /**
          * 删除分类
          * @return {[type]} [description]
          */
-        delCate: function() {
+        delCate: function () {
             var that = this,
                 treeObj = this.dataStore.treeObj,
                 nodes = treeObj.getSelectedNodes(),
@@ -140,7 +140,7 @@
             $.dialog({
                 title: "删除确认",
                 content: "真的要删除该分类吗?",
-                ok: function() {
+                ok: function () {
                     //获取分类信息
                     var sUrl = location.protocol + "//" + location.host + "/config",
                         param = {
@@ -182,7 +182,7 @@
          * @param  {[type]} type 'add':新增,'mod':修改
          * @return {[type]}      [description]
          */
-        operCate: function(type) {
+        operCate: function (type) {
             var that = this,
                 treeObj = this.dataStore.treeObj,
                 nodes = treeObj.getSelectedNodes(),
@@ -204,12 +204,12 @@
                 sName = type == "add" ? "" : " value='" + node.name + "'",
                 sHref = type == "add" ? "" : " value='" + node.site + "'",
                 sContent = "<div style='margin:5px'><span style='margin-right:15px'>名称:</span><input style='width:300px' type='text' id='inpName' " + sName + "></div>" +
-                "<div style='margin:5px'><span style='margin-right:15px'>网址:</span><input style='width:300px' type='text' id='inpHref' " + sHref + "></div>";
+                    "<div style='margin:5px'><span style='margin-right:15px'>网址:</span><input style='width:300px' type='text' id='inpHref' " + sHref + "></div>";
             //跳出对话框
             $.dialog({
                 title: sTypeName,
                 content: sContent,
-                ok: function() {
+                ok: function () {
                     var sCateName = $("#inpName").val(),
                         sSiteUrl = $("#inpHref").val();
                     //alert(sCateName);
@@ -276,7 +276,7 @@
                 var s = msgInfo;
             }
         },
-        initGrid: function() {
+        initGrid: function () {
             var that = this;
             var colList = [{
                 field: 'ck',
@@ -299,21 +299,29 @@
                 field: 'Summary',
                 title: '属性',
                 sortable: true,
-                width: 200,
+                width: 100,
                 //align: 'center',
                 editor: 'text'
             }, {
                 field: 'IsFilter',
                 title: '是否过滤',
                 sortable: false,
-                width: 200,
+                width: 100,
                 editor: 'text'
             }, {
                 field: 'isEnable',
                 title: '是否启用',
                 sortable: false,
-                width: 200,
+                width: 100,
                 editor: 'text'
+            }, {
+                field: 'operRules',
+                title: '操作',
+                sortable: false,
+                width: 200,
+                align: 'center',
+                editor: 'text',
+                formatter: that.formatAction
             }, {
                 field: 'oper',
                 title: '操作',
@@ -321,7 +329,7 @@
                 width: 100,
                 align: 'center',
                 editor: 'text',
-                formatter: function(value, row, index) {
+                formatter: function (value, row, index) {
                     var sResult = "";
                     if (row._id) {
                         sResult = "<a href='#' class='grap' _id='" + row._id + "' src='" + row.src + "' remark='" + row.remark + "'>采集</a>";
@@ -340,7 +348,7 @@
                 text: '新增',
                 iconCls: 'icon-add',
                 disabled: false,
-                handler: function() {
+                handler: function () {
                     var nodeList = that.dataStore.treeObj.getSelectedNodes();
                     if (nodeList.length > 0) {
                         if (nodeList[0].site) {
@@ -352,44 +360,23 @@
                         alert("请选择分类！");
                     }
                     return;
-                    /*
-                    var gridObj = that.dataStore.gridObj;
-
-                    if (that.endEditing()) {
-                        gridObj.datagrid('appendRow', {
-                            _id: "",
-                            src: "",
-                            remark: ""
-                        });
-
-                        that.dataStore.editIndex = gridObj.datagrid('getRows').length - 1;
-                        gridObj.datagrid('selectRow', that.dataStore.editIndex).datagrid('beginEdit', that.dataStore.editIndex);
-                    }
-                    */
                 }
             }, {
                 text: '修改',
                 iconCls: 'icon-edit',
                 disabled: false,
-                handler: function() {
+                handler: function () {
                     that.showEditWin('mod');
-                }
-            }, {
-                text: '配置规则',
-                iconCls: 'icon-edit',
-                disabled: false,
-                handler: function() {
-                    that.EditXPath()
                 }
             }, {
                 text: '删除',
                 iconCls: 'icon-remove',
                 disabled: false,
-                handler: function() {
+                handler: function () {
                     $.dialog({
                         title: "删除确认",
                         content: "真的要删除吗?",
-                        ok: function() {
+                        ok: function () {
                             var gridObj = that.dataStore.gridObj,
                                 sUrl = that.dataStore.ajaxUrl,
                                 checkedList = gridObj.datagrid('getChecked'),
@@ -407,7 +394,7 @@
                                 objInfo: checkedList[0]
                             };
 
-                            that.SendAjaxReq4Json(sUrl, param, function(dataInfo) {
+                            that.SendAjaxReq4Json(sUrl, param, function (dataInfo) {
                                 if (dataInfo.state == "ok") {
                                     for (var i = iCount - 1; i >= 0; i--) {
                                         var index = gridObj.datagrid('getRowIndex', checkedList[i]);
@@ -417,7 +404,7 @@
                                 } else {
                                     alert(dataInfo.msg);
                                 }
-                            }, function(msgInfo) {
+                            }, function (msgInfo) {
 
                             });
                         },
@@ -448,15 +435,15 @@
                 rownumbers: true,
                 singleSelect: false,
                 toolbar: toolbarList,
-                onDblClickRow: function(index, row) {
+                onDblClickRow: function (index, row) {
                     that.showEditWin('mod');
                 },
-                onSelect: function(index, row){
+                onSelect: function (index, row) {
 
                 }
             });
         },
-        endEditing: function() {
+        endEditing: function () {
             var that = this;
             if (that.dataStore.editIndex == undefined) {
                 return true;
@@ -470,7 +457,7 @@
                 return false;
             }
         },
-        showEditWin: function(operType, siteUrl) {
+        showEditWin: function (operType, siteUrl) {
             var that = this,
                 sTypeName = "",
                 sSrc = "",
@@ -525,7 +512,7 @@
             $.dialog({
                 title: sTypeName,
                 content: sContent,
-                ok: function() {
+                ok: function () {
                     var nodeList = that.dataStore.treeObj.getSelectedNodes();
                     var sSrc = $("#inpSrc").val();
                     var sHref = $("#inpHref").val();
@@ -604,7 +591,7 @@
                 var s = msgInfo;
             }
         },
-        EditXPath: function(siteUrl) {
+        EditXPath: function (rowIndex) {
             var that = this,
                 sTypeName = "编辑抓取规则xpath",
                 sitename = "",
@@ -628,55 +615,52 @@
                 sIsEnable = "";
 
             var gridObj = this.dataStore.gridObj;
-            var selectedRow = gridObj.datagrid('getSelected');
+            var rowData = gridObj.datagrid('getRows')[rowIndex];
 
-            if (selectedRow) {
-                summary_guid = selectedRow.remark;
-                sIsFilter = selectedRow.IsFilter;
-                sitename = selectedRow.siteName;
-                orgsrc = selectedRow.src;
-                // allow_domains = selectedRow.site;
-                start_urls = selectedRow._id;
-                sIsEnable = selectedRow.isEnable;
-                sRemark = "<select style='width:300px' id='selRemark'>";
-                for (var i = 0; i < typeInfo_config.length; i++) {
-                    sRemark += "<option value='" + typeInfo_config[i].pbotype + "'>" + typeInfo_config[i].pbotypename + "</option>";
-                }
-                sRemark += "</select>";
-                var sTmpReg = "/^(.*?)('" + selectedRow.remark + "')(.*)$/";
-                sRemark = sRemark.replace(eval(sTmpReg), "$1$2 selected $3");
-                var param = {
-                    type: "GetXpath",
-                    objInfo: {
-                        start_urls: start_urls,
-                        orgsrc: orgsrc
-                    }
-                };
-                var sUrl = location.protocol + "//" + location.host + "/editxpath";
-                that.SendAjaxReq4Json(sUrl, param, function(dataInfo) {
-                    if (dataInfo.length > 0) {
-                        rulename = dataInfo[0]["rulename"];
-                        allow_url = dataInfo[0]["allow_url"];
-                        allow_domains = dataInfo[0]["allowed_domains"];
-                        extract_from = dataInfo[0]["extract_from"].replace(/\"/g,"&quot;");
-                        title_xpath = dataInfo[0]["title_xpath"].replace(/\"/g,"&quot;");
-                        datetime_xpath = dataInfo[0]["datetime_xpath"].replace(/\"/g,"&quot;");
-                        datetime_re = dataInfo[0]["datetime_re"];
-                        author_xpath = dataInfo[0]["author_xpath"].replace(/\"/g,"&quot;");
-                        author_re = dataInfo[0]["author_re"];
-                        content_xpath = dataInfo[0]["content_xpath"].replace(/\"/g,"&quot;");
-                        src_xpath = dataInfo[0]["src_xpath"].replace(/\"/g,"&quot;");
-                        src_re = dataInfo[0]["src_re"];
-                    }
-                }, function(msg) {
-                    alert(msg);
-                }, '', false)
-            } else {
-                alert("请选择需要配置的对象");
-                return;
+            summary_guid = rowData.remark;
+            sIsFilter = rowData.IsFilter;
+            sitename = rowData.siteName;
+            orgsrc = rowData.src;
+            // allow_domains = rowData.site;
+            start_urls = rowData._id;
+            sIsEnable = rowData.isEnable;
+            var spiderType = '<select style="width:300px" id="spiderType"><option value="Universal" selected>通用</option><option value="AjaxSpider">Ajax</option><option value="WeChatSpider">微信</option></select>';
+            sRemark = "<select style='width:300px' id='selRemark'>";
+            for (var i = 0; i < typeInfo_config.length; i++) {
+                sRemark += "<option value='" + typeInfo_config[i].pbotype + "'>" + typeInfo_config[i].pbotypename + "</option>";
             }
+            sRemark += "</select>";
+            var sTmpReg = "/^(.*?)('" + rowData.remark + "')(.*)$/";
+            sRemark = sRemark.replace(eval(sTmpReg), "$1$2 selected $3");
+            var param = {
+                type: "GetXpath",
+                objInfo: {
+                    start_urls: start_urls,
+                    orgsrc: orgsrc
+                }
+            };
+            var sUrl = location.protocol + "//" + location.host + "/editxpath";
+            that.SendAjaxReq4Json(sUrl, param, function (dataInfo) {
+                if (dataInfo.length > 0) {
+                    rulename = dataInfo[0]["rulename"];
+                    allow_url = dataInfo[0]["allow_url"];
+                    allow_domains = dataInfo[0]["allowed_domains"];
+                    extract_from = dataInfo[0]["extract_from"].replace(/\"/g, "&quot;");
+                    title_xpath = dataInfo[0]["title_xpath"].replace(/\"/g, "&quot;");
+                    datetime_xpath = dataInfo[0]["datetime_xpath"].replace(/\"/g, "&quot;");
+                    datetime_re = dataInfo[0]["datetime_re"];
+                    author_xpath = dataInfo[0]["author_xpath"].replace(/\"/g, "&quot;");
+                    author_re = dataInfo[0]["author_re"];
+                    content_xpath = dataInfo[0]["content_xpath"].replace(/\"/g, "&quot;");
+                    src_xpath = dataInfo[0]["src_xpath"].replace(/\"/g, "&quot;");
+                    src_re = dataInfo[0]["src_re"];
+                }
+            }, function (msg) {
+                alert(msg);
+            }, '', false)
 
-            sContent = "<div style='margin:5px'><label style='margin-right: 15px;'>网站名称:</label><input style='width:300px' type='text' readonly='readonly' id='inpSiteName' value=" + sitename + "></div>" +
+            sContent = "<div style='margin:5px'><label style='margin-right: 15px;'>爬虫类别:</label>" + spiderType +
+                "<div style='margin:5px'><label style='margin-right: 15px;'>网站名称:</label><input style='width:300px' type='text' readonly='readonly' id='inpSiteName' value=" + sitename + "></div>" +
                 "<div style='margin:5px'><label style='margin-right: 15px;'>频道:</label><input style='width:300px' type='text' readonly='readonly' id='inpOrgSrc' value=" + orgsrc + "></div>" +
                 "<div style='margin:5px'><label for='inpRuleName' style='margin-right:15px;'>名称(英文):</label><input style='width:300px' type='text' id='inpRuleName' value=" + rulename + "></div>" +
                 "<div style='margin:5px'><label style='margin-right: 15px;'>域名:</label><input style='width:300px' type='text' id='inpAllowDomains' value=" + allow_domains + "></div>" +
@@ -695,7 +679,7 @@
             $.dialog({
                 title: sTypeName,
                 content: sContent,
-                ok: function() {
+                ok: function () {
                     var nodeList = that.dataStore.treeObj.getSelectedNodes();
                     var sRulename = $("#inpRuleName").val();
                     var sAllowdomains = $("#inpAllowDomains").val();
@@ -767,7 +751,7 @@
                 var s = msgInfo;
             }
         },
-        grap: function(urlList) {
+        grap: function (urlList) {
             var sUrl = location.protocol + "//" + location.host + "/grap",
                 param = {
                     urlList: urlList
@@ -781,6 +765,10 @@
             function errFunc(msgInfo) {
                 var s = msgInfo;
             }
+        },
+        formatAction: function (value, rowData, rowIndex) {
+            var actionStr = '<a title="修改" href="javascript:void(0)" onClick="ModObj.EditXPath(\'' + rowIndex + '\')">修改配置</a>';
+            return actionStr;
         }
     };
 
@@ -790,6 +778,6 @@
 
 window.ModObj = imp(["genTools", "getDataTools", "dataTools", "ModObj"]);
 
-$(function() {
+$(function () {
     ModObj.init();
 });

@@ -22,6 +22,14 @@
     "class": "UniversalcrawlItem",
     "loader": "ChinaLoader",
     "attrs": {
+      "_id": [
+        {
+          "method": "xpath",
+          "args": [
+            "//h1[@id='chan_newsTitle']/text()"
+          ]
+        }
+      ],
       "title": [
         {
           "method": "xpath",

@@ -50,14 +50,27 @@ class CrawlXpath(object):
     def savexpath(self):
         client = pymongo.MongoClient(self.mongo_uri)
         db = client[self.mongo_db]
+        rulename = self.rulename
         param = {
             "_id": self.rulename
         }
         document = {
             "_id": self.rulename,
-            "rulename": self.rulename,
+            "spider": self.spider,
+            "website": self.sitename,
+            "type": self.type,
+            "index": "http://tech.china.com/",
+            # "start_urls": self.start_urls,
+            "start_urls": {
+                "type": "dynamic",
+                "method": "china",
+                "args": [
+                    5,
+                    10
+                ]
+            },
             "allowed_domains": self.allow_domains,
-            "start_urls": self.start_urls,
+            "rulename": self.rulename,
             "allow_url": self.allow_url,
             "extract_from": self.extract_from,
             "title_xpath": self.title_xpath,
@@ -71,10 +84,74 @@ class CrawlXpath(object):
             "orgsrc": self.orgsrc,
             "sitename": self.sitename,
             "isfilter": self.isfilter,
-            "summary": self.summary,
-            "isenable": self.isenable
+            "isenable": self.isenable,
+            "item": {
+                "class": "UniversalcrawlItem",
+                "loader": "ChinaLoader",
+                "attrs": {
+                    "_id": [
+                        {
+                            "method": "xpath",
+                            "args": [
+                                "//h1[@id='chan_newsTitle']/text()"
+                            ]
+                        }
+                    ],
+                    "title": [
+                        {
+                            "method": "xpath",
+                            "args": [
+                                "//h1[@id='chan_newsTitle']/text()"
+                            ]
+                        }
+                    ],
+                    "srcUrl": [
+                        {
+                            "method": "attr",
+                            "args": [
+                                "url"
+                            ]
+                        }
+                    ],
+                    "content": [
+                        {
+                            "method": "xpath",
+                            "args": [
+                                "//div[@id='chan_newsDetail']//text()"
+                            ]
+                        }
+                    ],
+                    "datetime": [
+                        {
+                            "method": "xpath",
+                            "args": [
+                                "//div[@id='chan_newsInfo']/text()"
+                            ],
+                            "re": "(\\d+-\\d+-\\d+\\s\\d+:\\d+:\\d+)"
+                        }
+                    ],
+                    "src": [
+                        {
+                            "method": "xpath",
+                            "args": [
+                                "//div[@id='chan_newsInfo']/text()"
+                            ],
+                            "re": "来源：(.*)"
+                        }
+                    ],
+                    "siteName": [
+                        {
+                            "method": "value",
+                            "args": [
+                                "中华网"
+                            ]
+                        }
+                    ]
+                }
+            }
         }
         try:
+            set_config(rulename, document)
             info = db.siteInfo_xpath.update(param, {"$set": document}, upsert=True)
             return self.returnsuccessmsg(info) if len(info) > 0 else self.returnerrmsg(info)
         except Exception as e:

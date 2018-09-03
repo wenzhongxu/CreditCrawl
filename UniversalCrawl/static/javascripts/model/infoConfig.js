@@ -662,11 +662,11 @@
             sContent = "<div style='margin:5px'><label style='margin-right: 15px;'>爬虫类别:</label>" + spiderType +
                 "<div style='margin:5px'><label style='margin-right: 15px;'>网站名称:</label><input style='width:300px' type='text' readonly='readonly' id='inpSiteName' value=" + sitename + "></div>" +
                 "<div style='margin:5px'><label style='margin-right: 15px;'>频道:</label><input style='width:300px' type='text' readonly='readonly' id='inpOrgSrc' value=" + orgsrc + "></div>" +
-                "<div style='margin:5px'><label for='inpRuleName' style='margin-right:15px;'>名称(英文):</label><input style='width:300px' type='text' id='inpRuleName' value=" + rulename + "></div>" +
+                // "<div style='margin:5px'><label for='inpRuleName' style='margin-right:15px;'>名称(英文):</label><input style='width:300px' type='text' id='inpRuleName' value=" + rulename + "></div>" +
                 "<div style='margin:5px'><label style='margin-right: 15px;'>域名:</label><input style='width:300px' type='text' id='inpAllowDomains' value=" + allow_domains + "></div>" +
                 "<div style='margin:5px'><label style='margin-right: 15px;'>起始URL:</label><input style='width:300px' type='text' id='inpStartUrls' value=" + start_urls + "></div>" +
-                "<div style='margin:5px'><label for='inpAllowUrl' style='margin-right: 15px;'>链接规则:</label><input style='width:300px' type='text' id='inpAllowUrl' value=" + allow_url + "></div>" +
-                "<div style='margin:5px'><label for='inpExtractFrom' style='margin-right: 15px;'>提取区域:</label><input style='width:300px' type='text' id='inpExtractFrom' value=\"" + extract_from + "\"></div>" +
+                // "<div style='margin:5px'><label for='inpAllowUrl' style='margin-right: 15px;'>链接规则:</label><input style='width:300px' type='text' id='inpAllowUrl' value=" + allow_url + "></div>" +
+                // "<div style='margin:5px'><label for='inpExtractFrom' style='margin-right: 15px;'>提取区域:</label><input style='width:300px' type='text' id='inpExtractFrom' value=\"" + extract_from + "\"></div>" +
                 "<div style='margin:5px'><label for='inpTitleXpath' style='margin-right: 15px;'>标题:</label><input style='width:300px' type='text' id='inpTitleXpath' value=\"" + title_xpath + "\"></div>" +
                 "<div style='margin:5px'><label for='inpDatetimeXpath' style='margin-right: 15px;'>日期:</label><input style='width:300px' type='text' id='inpDatetimeXpath' value=\"" + datetime_xpath + "\"></div>" +
                 "<div style='margin:5px'><label for='inpDatetimeReXpath' style='margin-right: 15px;'>日期规则:</label><input style='width:300px' type='text' id='inpDatetimeReXpath' value=" + datetime_re + "></div>" +

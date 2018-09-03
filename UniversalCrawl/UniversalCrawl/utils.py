@@ -14,3 +14,9 @@ def get_config(name):
     path = dirname(realpath(__file__)) + '/configs/' + name + '.json'
     with open(path, 'r') as f:
         return json.loads(f.read())
+
+
+def set_config(name, config_dict):
+    path = dirname(realpath(__file__)) + '/configs/' + name + '.json'
+    with open(path, "w") as f:
+        json.dump(config_dict, f)

@@ -8,6 +8,7 @@
 
 import pymongo
 from UniversalCrawl import settings
+from UniversalCrawl.utils import *
 import csv
 import codecs
 from flask import jsonify
@@ -18,7 +19,7 @@ sys.setdefaultencoding('utf-8')
 
 class CrawlXpath(object):
     """docstring for CrawlXpath
-    Some operations baout CrawlXpath
+    Some operations about CrawlXpath
     """
 
     def __init__(self, req):
@@ -26,6 +27,7 @@ class CrawlXpath(object):
         self.mongo_db = settings.MONGO_DATABASE
 
         self.opertype = req.args['type'] if 'type' in req.args else None
+        self.spider = "Universal"
         self.rulename = req.args['objInfo[rulename]'] if 'objInfo[rulename]' in req.args else None
         self.allow_domains = req.args['objInfo[allow_domains]'] if 'objInfo[allow_domains]' in req.args else None
         self.start_urls = req.args['objInfo[start_urls]'] if 'objInfo[start_urls]' in req.args else None
@@ -41,7 +43,7 @@ class CrawlXpath(object):
         self.content_xpath = req.args['objInfo[content_xpath]'] if 'objInfo[content_xpath]' in req.args else None
         self.orgsrc = req.args['objInfo[orgsrc]'] if 'objInfo[orgsrc]' in req.args else None
         self.sitename = req.args['objInfo[siteName]'] if 'objInfo[siteName]' in req.args else None
-        self.summary = req.args['objInfo[summary]'] if 'objInfo[summary]' in req.args else None
+        self.type = req.args['objInfo[summary]'] if 'objInfo[summary]' in req.args else None
         self.isfilter = req.args['objInfo[isFilter]'] if 'objInfo[isFilter]' in req.args else "是"
         self.isenable = req.args['objInfo[isEnable]'] if 'objInfo[isEnable]' in req.args else "1"
 

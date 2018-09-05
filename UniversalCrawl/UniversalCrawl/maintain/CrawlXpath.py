@@ -48,14 +48,8 @@ class CrawlXpath(object):
         self.isenable = req.args['objInfo[isEnable]'] if 'objInfo[isEnable]' in req.args else "1"
 
     def savexpath(self):
-        client = pymongo.MongoClient(self.mongo_uri)
-        db = client[self.mongo_db]
         rulename = self.rulename
-        param = {
-            "_id": self.rulename
-        }
         document = {
-            "_id": self.rulename,
             "spider": self.spider,
             "website": self.sitename,
             "type": self.type,
@@ -70,19 +64,10 @@ class CrawlXpath(object):
                 ]
             },
             "allowed_domains": self.allow_domains,
-            "rulename": self.rulename,
-            "allow_url": self.allow_url,
-            "extract_from": self.extract_from,
-            "title_xpath": self.title_xpath,
-            "src_xpath": self.src_xpath,
-            "src_re": self.src_re,
-            "datetime_xpath": self.datetime_xpath,
-            "datetime_re": self.datetime_re,
-            "author_xpath": self.author_xpath,
-            "author_re": self.author_re,
-            "content_xpath": self.content_xpath,
-            "orgsrc": self.orgsrc,
-            "sitename": self.sitename,
+            # "rulename": self.rulename,
+            # "allow_url": self.allow_url,
+            # "extract_from": self.extract_from,
+
             "isfilter": self.isfilter,
             "isenable": self.isenable,
             "item": {
@@ -152,20 +137,13 @@ class CrawlXpath(object):
         }
         try:
             set_config(rulename, document)
-            info = db.siteInfo_xpath.update(param, {"$set": document}, upsert=True)
-            return self.returnsuccessmsg(info) if len(info) > 0 else self.returnerrmsg(info)
         except Exception as e:
             raise e
         
     def removexpath(self):
-        client = pymongo.MongoClient(self.mongo_uri)
-        db = client[self.mongo_db]
-        param = {
-            "_id": self.rulename
-        }
+        rulename = self.rulename
         try:
-            info = db.siteInfo_xpath.remove(param)
-            return self.returnsuccessmsg(info) if info['ok'] == 1.0 and info['n'] > 0 else self.returnerrmsg(info)
+            remove_config(rulename)
         except Exception as e:
             raise e
     

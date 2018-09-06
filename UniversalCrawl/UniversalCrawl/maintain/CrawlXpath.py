@@ -31,15 +31,20 @@ class CrawlXpath(object):
         self.rulename = req.args['objInfo[rulename]'] if 'objInfo[rulename]' in req.args else None
         self.allow_domains = req.args['objInfo[allow_domains]'] if 'objInfo[allow_domains]' in req.args else None
         self.start_urls = req.args['objInfo[start_urls]'] if 'objInfo[start_urls]' in req.args else None
-        self.allow_url = req.args['objInfo[allow_url]'] if 'objInfo[allow_url]' in req.args else None
-        self.extract_from = req.args['objInfo[extract_from]'] if 'objInfo[extract_from]' in req.args else None
+        # self.allow_url = req.args['objInfo[allow_url]'] if 'objInfo[allow_url]' in req.args else None
+        # self.extract_from = req.args['objInfo[extract_from]'] if 'objInfo[extract_from]' in req.args else None
+        self.title_gettype = req.args['objInfo[titleGetType]'] if 'objInfo[titleGetType]' in req.args else None
         self.title_xpath = req.args['objInfo[title_xpath]'] if 'objInfo[title_xpath]' in req.args else None
+        self.src_gettype = req.args['objInfo[srcGetType]'] if 'objInfo[srcGetType]' in req.args else None
         self.src_xpath = req.args['objInfo[src_xpath]'] if 'objInfo[src_xpath]' in req.args else None
         self.src_re = req.args['objInfo[src_re]'] if 'objInfo[src_re]' in req.args else None
+        self.datetime_gettype = req.args['objInfo[datetimeGetType]'] if 'objInfo[datetimeGetType]' in req.args else None
         self.datetime_xpath = req.args['objInfo[datetime_xpath]'] if 'objInfo[datetime_xpath]' in req.args else None
         self.datetime_re = req.args['objInfo[datetime_re]'] if 'objInfo[datetime_re]' in req.args else None
+        self.author_gettype = req.args['objInfo[authorGetType]'] if 'objInfo[authorGetType]' in req.args else None
         self.author_xpath = req.args['objInfo[author_xpath]'] if 'objInfo[author_xpath]' in req.args else None
         self.author_re = req.args['objInfo[author_re]'] if 'objInfo[author_re]' in req.args else None
+        self.content_gettype = req.args['objInfo[contentGetType]'] if 'objInfo[contentGetType]' in req.args else None
         self.content_xpath = req.args['objInfo[content_xpath]'] if 'objInfo[content_xpath]' in req.args else None
         self.orgsrc = req.args['objInfo[orgsrc]'] if 'objInfo[orgsrc]' in req.args else None
         self.sitename = req.args['objInfo[siteName]'] if 'objInfo[siteName]' in req.args else None
@@ -64,7 +69,7 @@ class CrawlXpath(object):
                 ]
             },
             "allowed_domains": self.allow_domains,
-            # "rulename": self.rulename,
+            "rulename": self.rulename,
             # "allow_url": self.allow_url,
             # "extract_from": self.extract_from,
 
@@ -76,17 +81,17 @@ class CrawlXpath(object):
                 "attrs": {
                     "_id": [
                         {
-                            "method": "xpath",
+                            "method": self.title_gettype,
                             "args": [
-                                "//h1[@id='chan_newsTitle']/text()"
+                                self.title_xpath
                             ]
                         }
                     ],
                     "title": [
                         {
-                            "method": "xpath",
+                            "method": self.title_gettype,
                             "args": [
-                                "//h1[@id='chan_newsTitle']/text()"
+                                self.title_xpath
                             ]
                         }
                     ],
@@ -100,17 +105,17 @@ class CrawlXpath(object):
                     ],
                     "content": [
                         {
-                            "method": "xpath",
+                            "method": self.content_gettype,
                             "args": [
-                                "//div[@id='chan_newsDetail']//text()"
+                                self.content_xpath
                             ]
                         }
                     ],
                     "datetime": [
                         {
-                            "method": "xpath",
+                            "method": self.datetime_gettype,
                             "args": [
-                                "//div[@id='chan_newsInfo']/text()"
+                                self.datetime_xpath
                             ],
                             "re": "(\\d+-\\d+-\\d+\\s\\d+:\\d+:\\d+)"
                         }

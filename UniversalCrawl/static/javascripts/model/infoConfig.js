@@ -658,22 +658,22 @@
             }, function (msg) {
                 alert(msg);
             }, '', false)
-
-            sContent = "<div style='margin:5px'><label style='margin-right: 15px;'>爬虫类别:</label>" + spiderType +
+            
+            sContent = "<div style='margin:5px'><label style='margin-right: 15px;'>爬虫类别:</label>" + spiderType + "</div>" +
                 "<div style='margin:5px'><label style='margin-right: 15px;'>网站名称:</label><input style='width:300px' type='text' readonly='readonly' id='inpSiteName' value=" + sitename + "></div>" +
                 "<div style='margin:5px'><label style='margin-right: 15px;'>频道:</label><input style='width:300px' type='text' readonly='readonly' id='inpOrgSrc' value=" + orgsrc + "></div>" +
-                // "<div style='margin:5px'><label for='inpRuleName' style='margin-right:15px;'>名称(英文):</label><input style='width:300px' type='text' id='inpRuleName' value=" + rulename + "></div>" +
+                "<div style='margin:5px'><label for='inpRuleName' style='margin-right:15px;'>名称(英文):</label><input style='width:300px' type='text' id='inpRuleName' value=" + rulename + "></div>" +
                 "<div style='margin:5px'><label style='margin-right: 15px;'>域名:</label><input style='width:300px' type='text' id='inpAllowDomains' value=" + allow_domains + "></div>" +
                 "<div style='margin:5px'><label style='margin-right: 15px;'>起始URL:</label><input style='width:300px' type='text' id='inpStartUrls' value=" + start_urls + "></div>" +
                 // "<div style='margin:5px'><label for='inpAllowUrl' style='margin-right: 15px;'>链接规则:</label><input style='width:300px' type='text' id='inpAllowUrl' value=" + allow_url + "></div>" +
                 // "<div style='margin:5px'><label for='inpExtractFrom' style='margin-right: 15px;'>提取区域:</label><input style='width:300px' type='text' id='inpExtractFrom' value=\"" + extract_from + "\"></div>" +
-                "<div style='margin:5px'><label for='inpTitleXpath' style='margin-right: 15px;'>标题:</label><input style='width:300px' type='text' id='inpTitleXpath' value=\"" + title_xpath + "\"></div>" +
-                "<div style='margin:5px'><label for='inpDatetimeXpath' style='margin-right: 15px;'>日期:</label><input style='width:300px' type='text' id='inpDatetimeXpath' value=\"" + datetime_xpath + "\"></div>" +
+                "<div style='margin:5px'><label for='inpTitleXpath' style='margin-right: 15px;'>标题:</label><select style='width:60px' id='inpTitleGetType'><option value='xpath' selected=''>xpath</option><option value='css'>css</option><option value='value'>value</option><option value='attr'>attr</option></select><input style='width:300px' type='text' id='inpTitleXpath' value=\"" + title_xpath + "\"></div>" +
+                "<div style='margin:5px'><label for='inpDatetimeXpath' style='margin-right: 15px;'>日期:</label><select style='width:60px' id='inpDatetimeGetType'><option value='xpath' selected=''>xpath</option><option value='css'>css</option><option value='value'>value</option><option value='attr'>attr</option></select><input style='width:300px' type='text' id='inpDatetimeXpath' value=\"" + datetime_xpath + "\"></div>" +
                 "<div style='margin:5px'><label for='inpDatetimeReXpath' style='margin-right: 15px;'>日期规则:</label><input style='width:300px' type='text' id='inpDatetimeReXpath' value=" + datetime_re + "></div>" +
-                "<div style='margin:5px'><label for='inpAuthorXpath' style='margin-right: 15px;'>作者:</label><input style='width:300px' type='text' id='inpAuthorXpath' value=\"" + author_xpath + "\"></div>" +
+                "<div style='margin:5px'><label for='inpAuthorXpath' style='margin-right: 15px;'>作者:</label><select style='width:60px' id='inpAuthorGetType'><option value='xpath' selected=''>xpath</option><option value='css'>css</option><option value='value'>value</option><option value='attr'>attr</option></select><input style='width:300px' type='text' id='inpAuthorXpath' value=\"" + author_xpath + "\"></div>" +
                 "<div style='margin:5px'><label for='inpAuthorReXpath' style='margin-right: 15px;'>作者规则:</label><input style='width:300px' type='text' id='inpAuthorReXpath' value=" + author_re + "></div>" +
-                "<div style='margin:5px'><label for='inpContentXpath' style='margin-right: 15px;'>内容:</label><input style='width:300px' type='text' id='inpContentXpath' value=\"" + content_xpath + "\"></div>" +
-                "<div style='margin:5px'><label for='inpSrcXpath' style='margin-right: 15px;'>来源:</label><input style='width:300px' type='text' id='inpSrcXpath' value=\"" + src_xpath + "\"></div>" +
+                "<div style='margin:5px'><label for='inpContentXpath' style='margin-right: 15px;'>内容:</label><select style='width:60px' id='inpContentGetType'><option value='xpath' selected=''>xpath</option><option value='css'>css</option><option value='value'>value</option><option value='attr'>attr</option></select><input style='width:300px' type='text' id='inpContentXpath' value=\"" + content_xpath + "\"></div>" +
+                "<div style='margin:5px'><label for='inpSrcXpath' style='margin-right: 15px;'>来源:</label><select style='width:60px' id='inpSrcGetType'><option value='xpath' selected=''>xpath</option><option value='css'>css</option><option value='value'>value</option><option value='attr'>attr</option></select><input style='width:300px' type='text' id='inpSrcXpath' value=\"" + src_xpath + "\"></div>" +
                 "<div style='margin:5px'><label for='inpSrcReXpath' style='margin-right: 15px;'>来源规则:</label><input style='width:300px' type='text' id='inpSrcReXpath' value=" + src_re + "></div>";
 
             $.dialog({
@@ -681,18 +681,24 @@
                 content: sContent,
                 ok: function () {
                     var nodeList = that.dataStore.treeObj.getSelectedNodes();
+                    var sSpiderType = $("#spiderType").val();
                     var sRulename = $("#inpRuleName").val();
                     var sAllowdomains = $("#inpAllowDomains").val();
                     var sStarturls = $("#inpStartUrls").val();
-                    var sAllowurl = $("#inpAllowUrl").val();
-                    var sExtractfrom = $("#inpExtractFrom").val();
+                    // var sAllowurl = $("#inpAllowUrl").val();
+                    // var sExtractfrom = $("#inpExtractFrom").val();
+                    var sTitleGetType = $("#inpTitleGetType").val();
                     var sTitlexpath = $("#inpTitleXpath").val();
+                    var sSrcGetType = $("#inpSrcGetType").val();
                     var sSrcxpath = $("#inpSrcXpath").val();
                     var sSrcre = $("#inpSrcReXpath").val();
+                    var sDatetimeGetType = $("#inpDatetimeGetType").val();
                     var sDatetimexpath = $("#inpDatetimeXpath").val();
                     var sDatetimere = $("#inpDatetimeReXpath").val();
+                    var sAuthorGetType = $("#inpAuthorGetType").val();
                     var sAuthorxpath = $("#inpAuthorXpath").val();
                     var sAuthorre = $("#inpAuthorReXpath").val();
+                    var sContentGetType = $("#inpContentGetType").val();
                     var sContentxpath = $("#inpContentXpath").val();
                     var param = {};
                     var sUrl = location.protocol + "//" + location.host + "/editxpath";
@@ -701,18 +707,24 @@
                         param = {
                             type: "EditXPath",
                             objInfo: {
+                                spidertype: sSpiderType,
                                 rulename: sRulename,
                                 allow_domains: sAllowdomains,
                                 start_urls: sStarturls,
-                                allow_url: sAllowurl,
-                                extract_from: sExtractfrom,
+                                // allow_url: sAllowurl,
+                                // extract_from: sExtractfrom,
+                                titleGetType : sTitleGetType,
                                 title_xpath: sTitlexpath,
+                                srcGetType : sSrcGetType,
                                 src_xpath: sSrcxpath,
                                 src_re: sSrcre,
+                                datetimeGetType : sDatetimeGetType,
                                 datetime_xpath: sDatetimexpath,
                                 datetime_re: sDatetimere,
+                                authorGetType: sAuthorGetType,
                                 author_xpath: sAuthorxpath,
                                 author_re: sAuthorre,
+                                contentGetType : sContentGetType,
                                 content_xpath: sContentxpath,
                                 orgsrc: orgsrc,
                                 siteName: sitename,

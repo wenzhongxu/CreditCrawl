@@ -308,7 +308,7 @@
                 sortable: false,
                 width: 100,
                 editor: 'text'
-            },{
+            }, {
                 field: 'ruleName',
                 title: '名称',
                 sortable: false,
@@ -664,7 +664,7 @@
             }, function (msg) {
                 alert(msg);
             }, '', false)
-            
+
             sContent = "<div style='margin:5px'><label style='margin-right: 15px;'>爬虫类别:</label>" + spiderType + "</div>" +
                 "<div style='margin:5px'><label style='margin-right: 15px;'>网站名称:</label><input style='width:300px' type='text' readonly='readonly' id='inpSiteName' value=" + sitename + "></div>" +
                 "<div style='margin:5px'><label style='margin-right: 15px;'>频道:</label><input style='width:300px' type='text' readonly='readonly' id='inpOrgSrc' value=" + orgsrc + "></div>" +
@@ -712,32 +712,30 @@
                     if (sRulename && sAllowdomains && sStarturls && sAllowurl && sExtractfrom && sTitlexpath && sDatetimexpath && sContentxpath) {
                         param = {
                             type: "EditXPath",
-                            objInfo: {
-                                spidertype: sSpiderType,
-                                rulename: sRulename,
-                                allow_domains: sAllowdomains,
-                                start_urls: sStarturls,
-                                // allow_url: sAllowurl,
-                                // extract_from: sExtractfrom,
-                                titleGetType : sTitleGetType,
-                                title_xpath: sTitlexpath,
-                                srcGetType : sSrcGetType,
-                                src_xpath: sSrcxpath,
-                                src_re: sSrcre,
-                                datetimeGetType : sDatetimeGetType,
-                                datetime_xpath: sDatetimexpath,
-                                datetime_re: sDatetimere,
-                                authorGetType: sAuthorGetType,
-                                author_xpath: sAuthorxpath,
-                                author_re: sAuthorre,
-                                contentGetType : sContentGetType,
-                                content_xpath: sContentxpath,
-                                orgsrc: orgsrc,
-                                siteName: sitename,
-                                summary: summary_guid,
-                                isFilter: sIsFilter,
-                                isEnable: sIsEnable
-                            }
+                            spidertype: sSpiderType,
+                            rulename: sRulename,
+                            allow_domains: sAllowdomains,
+                            start_urls: sStarturls,
+                            // allow_url: sAllowurl,
+                            // extract_from: sExtractfrom,
+                            titleGetType: sTitleGetType,
+                            title_xpath: sTitlexpath,
+                            srcGetType: sSrcGetType,
+                            src_xpath: sSrcxpath,
+                            src_re: sSrcre,
+                            datetimeGetType: sDatetimeGetType,
+                            datetime_xpath: sDatetimexpath,
+                            datetime_re: sDatetimere,
+                            authorGetType: sAuthorGetType,
+                            author_xpath: sAuthorxpath,
+                            author_re: sAuthorre,
+                            contentGetType: sContentGetType,
+                            content_xpath: sContentxpath,
+                            orgsrc: orgsrc,
+                            siteName: sitename,
+                            summary: summary_guid,
+                            isFilter: sIsFilter,
+                            isEnable: sIsEnable
                         };
                         //发送请求到服务器端，进行数据库操作
                         that.SendAjaxReq4Json(sUrl, param, sucFunc, errFunc);
@@ -785,8 +783,35 @@
             }
         },
         formatAction: function (value, rowData, rowIndex) {
-            var actionStr = '<a title="修改" href="javascript:void(0)" onClick="ModObj.EditXPath(\'' + rowIndex + '\')">修改配置</a> | <a title="开关" href="javascript:void(0)" onClick="ModObj.EditXPath(\'' + rowIndex + '\')">禁用</a>';
+            var actionStr = '<a title="修改" href="javascript:void(0)" onClick="ModObj.EditXPath(\'' + rowIndex + '\')">修改配置</a> |';
+            if (rowData.isEnable == "0") {
+                actionStr += '<a title="开关" href="javascript:void(0)" onClick="ModObj.EditEnable(\'' + rowData + '\')">启用</a>';
+            }
+            else {
+                actionStr += '<a title="开关" href="javascript:void(0)" onClick="ModObj.EditEnable(\'' + rowData + '\')">禁用</a>';
+            }
             return actionStr;
+        },
+        EditEnable: function (rowData) {
+            var sUrl = location.protocol + "//" + location.host + "/config";
+            var param = {
+                type: "saveSite",
+                objInfo: {
+                    _id: rowData.sHref,
+                    src: rowData.sSrc,
+                    remark: rowData.sRemark,
+                    Summary: rowData.sSummary,
+                    site: rowData.sSite,
+                    siteName: rowData.sSiteName,
+                    IsFilter: rowData.sIsFilter,
+                    isEnable: rowData.sIsEnable
+                }
+            }
+            that.SendAjaxReq4Json(sUrl, param, function (dataInfo) {
+                // 重载这一行数据或者修改是否启用状态
+            }, function (msg) {
+                alert(msg);
+            }, '', false)
         }
     };
 

@@ -28,29 +28,29 @@ class CrawlXpath(object):
 
         self.opertype = req.args['type'] if 'type' in req.args else None
         self.spider = "Universal"
-        self.rulename = req.args['objInfo[rulename]'] if 'objInfo[rulename]' in req.args else None
-        self.allow_domains = req.args['objInfo[allow_domains]'] if 'objInfo[allow_domains]' in req.args else None
-        self.start_urls = req.args['objInfo[start_urls]'] if 'objInfo[start_urls]' in req.args else None
-        # self.allow_url = req.args['objInfo[allow_url]'] if 'objInfo[allow_url]' in req.args else None
-        # self.extract_from = req.args['objInfo[extract_from]'] if 'objInfo[extract_from]' in req.args else None
-        self.title_gettype = req.args['objInfo[titleGetType]'] if 'objInfo[titleGetType]' in req.args else None
-        self.title_xpath = req.args['objInfo[title_xpath]'] if 'objInfo[title_xpath]' in req.args else None
-        self.src_gettype = req.args['objInfo[srcGetType]'] if 'objInfo[srcGetType]' in req.args else None
-        self.src_xpath = req.args['objInfo[src_xpath]'] if 'objInfo[src_xpath]' in req.args else None
-        self.src_re = req.args['objInfo[src_re]'] if 'objInfo[src_re]' in req.args else None
-        self.datetime_gettype = req.args['objInfo[datetimeGetType]'] if 'objInfo[datetimeGetType]' in req.args else None
-        self.datetime_xpath = req.args['objInfo[datetime_xpath]'] if 'objInfo[datetime_xpath]' in req.args else None
-        self.datetime_re = req.args['objInfo[datetime_re]'] if 'objInfo[datetime_re]' in req.args else None
-        self.author_gettype = req.args['objInfo[authorGetType]'] if 'objInfo[authorGetType]' in req.args else None
-        self.author_xpath = req.args['objInfo[author_xpath]'] if 'objInfo[author_xpath]' in req.args else None
-        self.author_re = req.args['objInfo[author_re]'] if 'objInfo[author_re]' in req.args else None
-        self.content_gettype = req.args['objInfo[contentGetType]'] if 'objInfo[contentGetType]' in req.args else None
-        self.content_xpath = req.args['objInfo[content_xpath]'] if 'objInfo[content_xpath]' in req.args else None
-        self.orgsrc = req.args['objInfo[orgsrc]'] if 'objInfo[orgsrc]' in req.args else None
-        self.sitename = req.args['objInfo[siteName]'] if 'objInfo[siteName]' in req.args else None
-        self.type = req.args['objInfo[summary]'] if 'objInfo[summary]' in req.args else None
-        self.isfilter = req.args['objInfo[isFilter]'] if 'objInfo[isFilter]' in req.args else "是"
-        self.isenable = req.args['objInfo[isEnable]'] if 'objInfo[isEnable]' in req.args else "1"
+        self.rulename = req.args['rulename'] if 'rulename' in req.args else None
+        self.allow_domains = req.args['allow_domains'] if 'allow_domains' in req.args else None
+        self.start_urls = req.args['start_urls'] if 'start_urls' in req.args else None
+        # self.allow_url = req.args['allow_url'] if 'allow_url' in req.args else None
+        # self.extract_from = req.args['extract_from'] if 'extract_from' in req.args else None
+        self.title_gettype = req.args['titleGetType'] if 'titleGetType' in req.args else None
+        self.title_xpath = req.args['title_xpath'] if 'title_xpath' in req.args else None
+        self.src_gettype = req.args['srcGetType'] if 'srcGetType' in req.args else None
+        self.src_xpath = req.args['src_xpath'] if 'src_xpath' in req.args else None
+        self.src_re = req.args['src_re'] if 'src_re' in req.args else None
+        self.datetime_gettype = req.args['datetimeGetType'] if 'datetimeGetType' in req.args else None
+        self.datetime_xpath = req.args['datetime_xpath'] if 'datetime_xpath' in req.args else None
+        self.datetime_re = req.args['datetime_re'] if 'datetime_re' in req.args else None
+        self.author_gettype = req.args['authorGetType'] if 'authorGetType' in req.args else None
+        self.author_xpath = req.args['author_xpath'] if 'author_xpath' in req.args else None
+        self.author_re = req.args['author_re'] if 'author_re' in req.args else None
+        self.content_gettype = req.args['contentGetType'] if 'contentGetType' in req.args else None
+        self.content_xpath = req.args['content_xpath'] if 'content_xpath' in req.args else None
+        self.orgsrc = req.args['orgsrc'] if 'orgsrc' in req.args else None
+        self.sitename = req.args['siteName'] if 'siteName' in req.args else None
+        self.type = req.args['summary'] if 'summary' in req.args else None
+        self.isfilter = req.args['isFilter'] if 'isFilter' in req.args else "是"
+        self.isenable = req.args['isEnable'] if 'isEnable' in req.args else "1"
 
     def savexpath(self):
         rulename = self.rulename
@@ -164,50 +164,12 @@ class CrawlXpath(object):
         client = pymongo.MongoClient(self.mongo_uri)
         db = client[self.mongo_db]
         if len(query) == 0:
-            query["isenable"] = "启用"
+            query["isenable"] = "1"
         else:
             pass
         objlist = db.siteInfo_xpath.find(query).sort([("rulename", 1)])
         return objlist
-    
-    def updatecsvfile(self):
-        datas = self.getxpathdbinfo()
-        with open('CreditCrawl/maintain/SiteInfo.csv', 'wb') as csvfileWriter:
-            csvfileWriter.write(codecs.BOM_UTF8)
-            writer = csv.writer(csvfileWriter)
-            fieldlist = [
-                "rulename",
-                "allowed_domains",
-                "start_urls",
-                "allow_url",
-                "extract_from",
-                "title_xpath",
-                "src_xpath",
-                "src_re",
-                "datetime_xpath",
-                "datetime_re",
-                "author_xpath",
-                "author_re",
-                "content_xpath",
-                "orgsrc",
-                "sitename",
-                "isfilter",
-                "summary",
-                "isenable"
-            ]
-            writer.writerow(fieldlist)
-            for data in datas:
-                datavaluelst = []
-                for field in fieldlist:
-                    if field not in data:
-                        datavaluelst.append("None")
-                    else:
-                        datavaluelst.append(data[field])
-                try:
-                    writer.writerow(datavaluelst)
-                except Exception as e:
-                    print "write csv exception. e = { %s }" % e
-    
+
     def operxpath(self):
         if self.opertype == "EditXPath":
             return self.savexpath()
@@ -218,17 +180,19 @@ class CrawlXpath(object):
         else:
             pass
     
-    def returnsuccessmsg(self, info):
-        self.updatecsvfile()
-        data = dict()
-        data["state"] = "ok"
-        data["msg"] = info
+    @staticmethod
+    def returnsuccessmsg(info):
+        data = {
+            "state": "ok",
+            "msg": info
+        }
         jsonres = jsonify(data)
         return jsonres
-    
-    def returnerrmsg(self, info):
-        self.updatecsvfile()
-        data = dict()
-        data["state"] = "err"
-        data["msg"] = info
+
+    @staticmethod
+    def returnerrmsg(info):
+        data = {
+            "state": "err",
+            "msg": info
+        }
         return jsonify(data)

@@ -117,23 +117,23 @@ class CrawlXpath(object):
                             "args": [
                                 self.datetime_xpath
                             ],
-                            "re": "(\\d+-\\d+-\\d+\\s\\d+:\\d+:\\d+)"
+                            "re": self.datetime_re
                         }
                     ],
                     "src": [
                         {
-                            "method": "xpath",
+                            "method": self.src_gettype,
                             "args": [
-                                "//div[@id='chan_newsInfo']/text()"
+                                self.src_xpath
                             ],
-                            "re": "来源：(.*)"
+                            "re": self.src_re
                         }
                     ],
                     "siteName": [
                         {
                             "method": "value",
                             "args": [
-                                "中华网"
+                                self.sitename
                             ]
                         }
                     ]

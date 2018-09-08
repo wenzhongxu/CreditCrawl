@@ -308,6 +308,12 @@
                 sortable: false,
                 width: 100,
                 editor: 'text'
+            },{
+                field: 'ruleName',
+                title: '名称',
+                sortable: false,
+                width: 100,
+                editor: 'text'
             }, {
                 field: 'isEnable',
                 title: '是否启用',
@@ -741,8 +747,8 @@
                         return false;
                     }
                 },
-                width: 600,
-                height: 60,
+                width: 800,
+                height: 400,
                 okVal: "保存",
                 cancelVal: "关闭",
                 cancel: true,
@@ -750,8 +756,8 @@
                 max: 0,
                 resize: 0,
                 lock: 1,
-                left: (this.dataStore.docWidth - 400) / 2,
-                top: (this.dataStore.docHeight - 400) / 2 - 28
+                left: (this.dataStore.docWidth - 800) / 2,
+                top: (this.dataStore.docHeight - 500) / 2
             });
 
             function sucFunc(dataInfo) {
@@ -779,7 +785,7 @@
             }
         },
         formatAction: function (value, rowData, rowIndex) {
-            var actionStr = '<a title="修改" href="javascript:void(0)" onClick="ModObj.EditXPath(\'' + rowIndex + '\')">修改配置</a>';
+            var actionStr = '<a title="修改" href="javascript:void(0)" onClick="ModObj.EditXPath(\'' + rowIndex + '\')">修改配置</a> | <a title="开关" href="javascript:void(0)" onClick="ModObj.EditXPath(\'' + rowIndex + '\')">禁用</a>';
             return actionStr;
         }
     };

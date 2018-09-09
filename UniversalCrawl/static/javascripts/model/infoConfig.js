@@ -609,6 +609,7 @@
                 allow_url = "",
                 extract_from = "",
                 title_xpath = "",
+                srcurl_xpath = "",
                 datetime_xpath = "",
                 datetime_re = "",
                 author_xpath = "",
@@ -674,6 +675,7 @@
                 // "<div style='margin:5px'><label for='inpAllowUrl' style='margin-right: 15px;'>链接规则:</label><input style='width:300px' type='text' id='inpAllowUrl' value=" + allow_url + "></div>" +
                 // "<div style='margin:5px'><label for='inpExtractFrom' style='margin-right: 15px;'>提取区域:</label><input style='width:300px' type='text' id='inpExtractFrom' value=\"" + extract_from + "\"></div>" +
                 "<div style='margin:5px'><label for='inpTitleXpath' style='margin-right: 15px;'>标题:</label><select style='width:60px' id='inpTitleGetType'><option value='xpath' selected=''>xpath</option><option value='css'>css</option><option value='value'>value</option><option value='attr'>attr</option></select><input style='width:300px' type='text' id='inpTitleXpath' value=\"" + title_xpath + "\"></div>" +
+                "<div style='margin:5px'><label for='inpSrcUrlXpath' style='margin-right: 15px;'>链接:</label><select style='width:60px' id='inpSrcUrlGetType'><option value='xpath'>xpath</option><option value='css'>css</option><option value='value'>value</option><option value='attr' selected=''>attr</option></select><input style='width:300px' type='text' id='inpSrcUrlXpath' value=\"" + srcurl_xpath + "\"></div>" +
                 "<div style='margin:5px'><label for='inpDatetimeXpath' style='margin-right: 15px;'>日期:</label><select style='width:60px' id='inpDatetimeGetType'><option value='xpath' selected=''>xpath</option><option value='css'>css</option><option value='value'>value</option><option value='attr'>attr</option></select><input style='width:300px' type='text' id='inpDatetimeXpath' value=\"" + datetime_xpath + "\"></div>" +
                 "<div style='margin:5px'><label for='inpDatetimeReXpath' style='margin-right: 15px;'>日期规则:</label><input style='width:300px' type='text' id='inpDatetimeReXpath' value=" + datetime_re + "></div>" +
                 "<div style='margin:5px'><label for='inpAuthorXpath' style='margin-right: 15px;'>作者:</label><select style='width:60px' id='inpAuthorGetType'><option value='xpath' selected=''>xpath</option><option value='css'>css</option><option value='value'>value</option><option value='attr'>attr</option></select><input style='width:300px' type='text' id='inpAuthorXpath' value=\"" + author_xpath + "\"></div>" +
@@ -695,6 +697,8 @@
                     // var sExtractfrom = $("#inpExtractFrom").val();
                     var sTitleGetType = $("#inpTitleGetType").val();
                     var sTitlexpath = $("#inpTitleXpath").val();
+                    var sSrcUrlGetType = $("#inpSrcUrlGetType").val();
+                    var sSrcUrlxpath = $("#inpSrcUrlXpath").val();
                     var sSrcGetType = $("#inpSrcGetType").val();
                     var sSrcxpath = $("#inpSrcXpath").val();
                     var sSrcre = $("#inpSrcReXpath").val();
@@ -720,6 +724,8 @@
                             // extract_from: sExtractfrom,
                             titleGetType: sTitleGetType,
                             title_xpath: sTitlexpath,
+                            srcUrlGetType: sSrcUrlGetType,
+                            srcUrl_xpath: sSrcUrlxpath,
                             srcGetType: sSrcGetType,
                             src_xpath: sSrcxpath,
                             src_re: sSrcre,

@@ -9,8 +9,6 @@
 import pymongo
 from UniversalCrawl import settings
 from UniversalCrawl.utils import *
-import csv
-import codecs
 from flask import jsonify
 import sys
 reload(sys)
@@ -35,6 +33,8 @@ class CrawlXpath(object):
         # self.extract_from = req.args['extract_from'] if 'extract_from' in req.args else None
         self.title_gettype = req.args['titleGetType'] if 'titleGetType' in req.args else None
         self.title_xpath = req.args['title_xpath'] if 'title_xpath' in req.args else None
+        self.srcurl_gettype = req.args['srcUrlGetType'] if 'srcUrlGetType' in req.args else None
+        self.srcurl_xpath = req.args['srcUrl_xpath'] if 'srcUrl_xpath' in req.args else None
         self.src_gettype = req.args['srcGetType'] if 'srcGetType' in req.args else None
         self.src_xpath = req.args['src_xpath'] if 'src_xpath' in req.args else None
         self.src_re = req.args['src_re'] if 'src_re' in req.args else None
@@ -97,9 +97,9 @@ class CrawlXpath(object):
                     ],
                     "srcUrl": [
                         {
-                            "method": "attr",
+                            "method": self.srcurl_gettype,
                             "args": [
-                                "url"
+                                self.srcurl_xpath
                             ]
                         }
                     ],

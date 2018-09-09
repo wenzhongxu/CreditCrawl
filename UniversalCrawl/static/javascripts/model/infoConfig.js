@@ -315,12 +315,6 @@
                 width: 100,
                 editor: 'text'
             }, {
-                field: 'isEnable',
-                title: '是否启用',
-                sortable: false,
-                width: 100,
-                editor: 'text'
-            }, {
                 field: 'operRules',
                 title: '操作',
                 sortable: false,
@@ -328,23 +322,6 @@
                 align: 'center',
                 editor: 'text',
                 formatter: that.formatAction
-            }, {
-                field: 'oper',
-                title: '操作',
-                sortable: true,
-                width: 100,
-                align: 'center',
-                editor: 'text',
-                formatter: function (value, row, index) {
-                    var sResult = "";
-                    if (row._id) {
-                        sResult = "<a href='#' class='grap' _id='" + row._id + "' src='" + row.src + "' remark='" + row.remark + "'>采集</a>";
-                        return sResult;
-                    } else {
-                        return value;
-                    }
-                },
-                hidden: 1
             }, {
                 field: 'site',
                 hidden: 1
@@ -468,6 +445,7 @@
                 sTypeName = "",
                 sSrc = "",
                 sHref = "",
+                sRuleName = "",
                 sSite = siteUrl ? siteUrl : "",
                 sRemark = "",
                 sContent = "",
@@ -481,7 +459,6 @@
                 }
                 sRemark += "</select>";
                 sIsFilter = "<select style='width:300px' id='isFilter'><option value='是'>是</option><option value='否'>否</option></select>";
-                sIsEnable = "<select style='width:300px' id='isEnable'><option value='启用'>启用</option><option value='禁用'>禁用</option></select>";
             } else {
                 sTypeName = "修改配置信息";
                 sDisabled = "disabled='disabled'";
@@ -491,6 +468,7 @@
                     sSite = selectedRow.site;
                     sSrc = "value='" + selectedRow.src + "'";
                     sHref = "value='" + selectedRow._id + "'";
+                    sRuleName = "value='" + selectedRow.rulename + "'";
                     sRemark = "<select style='width:300px' id='selRemark'>";
                     for (var i = 0; i < typeInfo_config.length; i++) {
                         sRemark += "<option value='" + typeInfo_config[i].pbotype + "'>" + typeInfo_config[i].pbotypename + "</option>";
@@ -501,9 +479,7 @@
                     sIsFilter = "<select style='width:300px' id='isFilter'><option value='是'>是</option><option value='否'>否</option></select>";
                     var sTmpRegScr = "/^(.*?)('" + selectedRow.IsFilter + "')(.*)$/";
                     sIsFilter = sIsFilter.replace(eval(sTmpRegScr), "$1$2 selected $3");
-                    sIsEnable = "<select style='width:300px' id='isEnable'><option value='启用'>启用</option><option value='禁用'>禁用</option></select>";
                     var sTmpRegEnable = "/^(.*?)('" + selectedRow.isEnable + "')(.*)$/";
-                    sIsEnable = sIsEnable.replace(eval(sTmpRegEnable), "$1$2 selected $3");
                 } else {
                     alert("请选择需要修改的对象");
                     return;
@@ -511,9 +487,9 @@
             }
             sContent = "<div style='margin:5px'><span style='margin-right:15px'>频道:</span><input style='width:300px' type='text' id='inpSrc' " + sSrc + "></div>" +
                 "<div style='margin:5px'><span style='margin-right:15px'>网址:</span><input " + sDisabled + " style='width:300px' type='text' id='inpHref' " + sHref + "></div>" +
+                "<div style='margin:5px'><span style='margin-right:15px'>名称:</span><input style='width:300px' type='text' id='inpRuleName' " + sRuleName + "></div>" +
                 "<div style='margin:5px'><span style='margin-right: 15px;'>属性:</span>" + sRemark + "</div>" +
-                "<div style='margin:5px'><span style='margin-right: 15px;'>过滤:</span>" + sIsFilter + "</div>" +
-                "<div style='margin:5px'><span style='margin-right: 15px;'>启用:</span>" + sIsEnable + "</div>";
+                "<div style='margin:5px'><span style='margin-right: 15px;'>过滤:</span>" + sIsFilter + "</div>";
 
             $.dialog({
                 title: sTypeName,
@@ -522,17 +498,17 @@
                     var nodeList = that.dataStore.treeObj.getSelectedNodes();
                     var sSrc = $("#inpSrc").val();
                     var sHref = $("#inpHref").val();
+                    var sRuleName = $("#inpRuleName").val();
                     var sRemark = $("#selRemark").val();
                     var sSummary = $("#selRemark").find("option:selected").text();
                     var sIsFilter = $("#isFilter").val();
-                    var sIsEnable = $("#isEnable").val();
                     var param = {},
                         sSiteName = "";
                     //判断添加的网址是否是属于这个网站的，是允许添加，不是不允许添加
                     if (sHref.indexOf(sSite) >= 0) {
                         var sUrl = location.protocol + "//" + location.host + "/config";
                         //判断是否都填全了
-                        if (sSrc && sHref && sRemark) {
+                        if (sSrc && sHref && sRuleName && sRemark) {
                             if (nodeList.length > 0) {
                                 sSiteName = nodeList[0].name;
                             }
@@ -541,12 +517,12 @@
                                 objInfo: {
                                     _id: sHref,
                                     src: sSrc,
+                                    ruleName: sRuleName,
                                     remark: sRemark,
                                     Summary: sSummary,
                                     site: sSite,
                                     siteName: sSiteName,
-                                    IsFilter: sIsFilter,
-                                    isEnable: sIsEnable
+                                    IsFilter: sIsFilter
                                 }
                             };
                             //发送请求到服务器端，进行数据库操作
@@ -618,8 +594,7 @@
                 src_xpath = "",
                 src_re = "",
                 summary_guid = "",
-                sIsFilter = "",
-                sIsEnable = "";
+                sIsFilter = "";
 
             var gridObj = this.dataStore.gridObj;
             var rowData = gridObj.datagrid('getRows')[rowIndex];
@@ -627,10 +602,10 @@
             summary_guid = rowData.remark;
             sIsFilter = rowData.IsFilter;
             sitename = rowData.siteName;
+            rulename = rowData.ruleName;
             orgsrc = rowData.src;
             // allow_domains = rowData.site;
             start_urls = rowData._id;
-            sIsEnable = rowData.isEnable;
             var spiderType = '<select style="width:300px" id="spiderType"><option value="Universal" selected>通用</option><option value="AjaxSpider">Ajax</option><option value="WeChatSpider">微信</option></select>';
             sRemark = "<select style='width:300px' id='selRemark'>";
             for (var i = 0; i < typeInfo_config.length; i++) {
@@ -649,7 +624,7 @@
             var sUrl = location.protocol + "//" + location.host + "/editxpath";
             that.SendAjaxReq4Json(sUrl, param, function (dataInfo) {
                 if (dataInfo.length > 0) {
-                    rulename = dataInfo[0]["rulename"];
+                    rulename = dataInfo[0]["ruleName"];
                     allow_url = dataInfo[0]["allow_url"];
                     allow_domains = dataInfo[0]["allowed_domains"];
                     extract_from = dataInfo[0]["extract_from"].replace(/\"/g, "&quot;");
@@ -669,7 +644,7 @@
             sContent = "<div style='margin:5px'><label style='margin-right: 15px;'>爬虫类别:</label>" + spiderType + "</div>" +
                 "<div style='margin:5px'><label style='margin-right: 15px;'>网站名称:</label><input style='width:300px' type='text' readonly='readonly' id='inpSiteName' value=" + sitename + "></div>" +
                 "<div style='margin:5px'><label style='margin-right: 15px;'>频道:</label><input style='width:300px' type='text' readonly='readonly' id='inpOrgSrc' value=" + orgsrc + "></div>" +
-                "<div style='margin:5px'><label for='inpRuleName' style='margin-right:15px;'>名称(英文):</label><input style='width:300px' type='text' id='inpRuleName' value=" + rulename + "></div>" +
+                "<div style='margin:5px'><label for='inpRuleName' style='margin-right:15px;'>名称:</label><input style='width:300px' type='text' readonly='readonly' id='inpRuleName' value=" + rulename + "></div>" +
                 "<div style='margin:5px'><label style='margin-right: 15px;'>域名:</label><input style='width:300px' type='text' id='inpAllowDomains' value=" + allow_domains + "></div>" +
                 "<div style='margin:5px'><label style='margin-right: 15px;'>起始URL:</label><input style='width:300px' type='text' id='inpStartUrls' value=" + start_urls + "></div>" +
                 // "<div style='margin:5px'><label for='inpAllowUrl' style='margin-right: 15px;'>链接规则:</label><input style='width:300px' type='text' id='inpAllowUrl' value=" + allow_url + "></div>" +
@@ -740,8 +715,7 @@
                             orgsrc: orgsrc,
                             siteName: sitename,
                             summary: summary_guid,
-                            isFilter: sIsFilter,
-                            isEnable: sIsEnable
+                            isFilter: sIsFilter
                         };
                         //发送请求到服务器端，进行数据库操作
                         that.SendAjaxReq4Json(sUrl, param, sucFunc, errFunc);
@@ -810,7 +784,7 @@
                     site: rowData.sSite,
                     siteName: rowData.sSiteName,
                     IsFilter: rowData.sIsFilter,
-                    isEnable: rowData.sIsEnable
+                    isEnable: rowData.sisEnable
                 }
             }
             that.SendAjaxReq4Json(sUrl, param, function (dataInfo) {

@@ -44,6 +44,8 @@ class SiteInfoCateconfig(object):
 
         self.siteName = req.args['objInfo[siteName]'] if 'objInfo[siteName]' in req.args else None
 
+        self.ruleName = req.args['objInfo[ruleName]'] if 'objInfo[ruleName]' in req.args else None
+
         self.IsFilter = req.args['objInfo[IsFilter]'] if 'objInfo[IsFilter]' in req.args else None
 
         self.isEnable = req.args['objInfo[isEnable]'] if 'objInfo[isEnable]' in req.args else "1"
@@ -113,6 +115,7 @@ class SiteInfoCateconfig(object):
             "Summary": self.Summary,
             "site": self.site,
             "siteName": self.siteName,
+            "ruleName": self.ruleName,
             "IsFilter": self.IsFilter,
             "isEnable": self.isEnable
         }

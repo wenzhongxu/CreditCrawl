@@ -151,14 +151,12 @@ class CrawlXpath(object):
             remove_config(rulename)
         except Exception as e:
             raise e
-    
-    def getxpathinfo(self):
-        param = {
-            "start_urls": self.start_urls,
-            "orgsrc": self.orgsrc
-        }
-        datas = self.getxpathdbinfo(param)
-        return jsonify(list(datas))
+
+    @staticmethod
+    def getxpathinfo(req):
+        name = req.args['rulename']
+        config = get_config(name)
+        return config
     
     def getxpathdbinfo(self, query={}):
         client = pymongo.MongoClient(self.mongo_uri)
@@ -170,13 +168,13 @@ class CrawlXpath(object):
         objlist = db.siteInfo_xpath.find(query).sort([("rulename", 1)])
         return objlist
 
-    def operxpath(self):
+    def operxpath(self, req):
         if self.opertype == "EditXPath":
             return self.savexpath()
         elif self.opertype == "removexpath":
             return self.removexpath()
         elif self.opertype == "GetXpath":
-            return self.getxpathinfo()
+            return self.getxpathinfo(req)
         else:
             pass
     

@@ -616,10 +616,7 @@
             sRemark = sRemark.replace(eval(sTmpReg), "$1$2 selected $3");
             var param = {
                 type: "GetXpath",
-                objInfo: {
-                    start_urls: start_urls,
-                    orgsrc: orgsrc
-                }
+                rulename: rulename
             };
             var sUrl = location.protocol + "//" + location.host + "/editxpath";
             that.SendAjaxReq4Json(sUrl, param, function (dataInfo) {
@@ -763,7 +760,7 @@
             }
         },
         formatAction: function (value, rowData, rowIndex) {
-            var actionStr = '<a title="修改" href="javascript:void(0)" onClick="ModObj.EditXPath(\'' + rowIndex + '\')">修改配置</a> |';
+            var actionStr = '<a title="修改" href="javascript:void(0)" onClick="ModObj.EditXPath(\'' + rowIndex + '\')">修改配置</a> | ';
             if (rowData.isEnable == "0") {
                 actionStr += '<a title="开关" href="javascript:void(0)" onClick="ModObj.EditEnable(\'' + rowData + '\')">启用</a>';
             }

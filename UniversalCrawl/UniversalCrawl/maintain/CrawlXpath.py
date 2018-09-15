@@ -153,8 +153,8 @@ class CrawlXpath(object):
             raise e
 
     @staticmethod
-    def getxpathinfo(req):
-        name = req.args['rulename']
+    def getxpathinfo(self):
+        name = self.rulename
         config = get_config(name)
         return config
     
@@ -168,13 +168,13 @@ class CrawlXpath(object):
         objlist = db.siteInfo_xpath.find(query).sort([("rulename", 1)])
         return objlist
 
-    def operxpath(self, req):
+    def operxpath(self):
         if self.opertype == "EditXPath":
             return self.savexpath()
         elif self.opertype == "removexpath":
             return self.removexpath()
         elif self.opertype == "GetXpath":
-            return self.getxpathinfo(req)
+            return self.getxpathinfo(self)
         else:
             pass
     

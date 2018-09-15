@@ -13,8 +13,11 @@ import os
 
 def get_config(name):
     path = dirname(realpath(__file__)) + '/configs/' + name + '.json'
-    with open(path, 'r') as f:
-        return json.loads(f.read())
+    if os.path.exists(path):
+        with open(path, 'r') as f:
+            return json.loads(f.read())
+    else:
+        return ""
 
 
 def set_config(name, config_dict):

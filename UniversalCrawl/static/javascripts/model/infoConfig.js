@@ -620,7 +620,7 @@
             };
             var sUrl = location.protocol + "//" + location.host + "/editxpath";
             that.SendAjaxReq4Json(sUrl, param, function (dataInfo) {
-                if (dataInfo.length > 0) {
+                if (dataInfo != null) {
                     rulename = dataInfo[0]["ruleName"];
                     allow_url = dataInfo[0]["allow_url"];
                     allow_domains = dataInfo[0]["allowed_domains"];

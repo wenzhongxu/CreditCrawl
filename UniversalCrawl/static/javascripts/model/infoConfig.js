@@ -621,18 +621,18 @@
             var sUrl = location.protocol + "//" + location.host + "/editxpath";
             that.SendAjaxReq4Json(sUrl, param, function (dataInfo) {
                 if (dataInfo != null) {
-                    rulename = dataInfo[0]["ruleName"];
-                    allow_url = dataInfo[0]["allow_url"];
-                    allow_domains = dataInfo[0]["allowed_domains"];
-                    extract_from = dataInfo[0]["extract_from"].replace(/\"/g, "&quot;");
-                    title_xpath = dataInfo[0]["title_xpath"].replace(/\"/g, "&quot;");
-                    datetime_xpath = dataInfo[0]["datetime_xpath"].replace(/\"/g, "&quot;");
-                    datetime_re = dataInfo[0]["datetime_re"];
-                    author_xpath = dataInfo[0]["author_xpath"].replace(/\"/g, "&quot;");
-                    author_re = dataInfo[0]["author_re"];
-                    content_xpath = dataInfo[0]["content_xpath"].replace(/\"/g, "&quot;");
-                    src_xpath = dataInfo[0]["src_xpath"].replace(/\"/g, "&quot;");
-                    src_re = dataInfo[0]["src_re"];
+                    rulename = dataInfo.ruleName;
+                    allow_url = dataInfo.allow_url;
+                    allow_domains = dataInfo.allowed_domains;
+                    // extract_from = dataInfo.extract_from.replace(/\"/g, "&quot;");
+                    title_xpath = dataInfo.item.attrs.title[0].args[0].replace(/\"/g, "&quot;");
+                    datetime_xpath = dataInfo.item.attrs.datetime[0].args[0].replace(/\"/g, "&quot;");
+                    datetime_re = dataInfo.item.attrs.datetime[0].re;
+                    // author_xpath = dataInfo.item.attrs.author[0].args.replace(/\"/g, "&quot;");
+                    // author_re = dataInfo.item.attrs.author[0].re;
+                    content_xpath = dataInfo.item.attrs.content[0].args[0].replace(/\"/g, "&quot;");
+                    src_xpath = dataInfo.item.attrs.src[0].args[0].replace(/\"/g, "&quot;");
+                    src_re = dataInfo.item.attrs.src[0].re;
                 }
             }, function (msg) {
                 alert(msg);

@@ -156,7 +156,8 @@ class CrawlXpath(object):
     def getxpathinfo(self):
         name = self.rulename
         config = get_config(name)
-        return config
+        jsonres = jsonify(config)
+        return jsonres
     
     def getxpathdbinfo(self, query={}):
         client = pymongo.MongoClient(self.mongo_uri)

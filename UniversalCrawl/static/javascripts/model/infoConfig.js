@@ -468,7 +468,7 @@
                     sSite = selectedRow.site;
                     sSrc = "value='" + selectedRow.src + "'";
                     sHref = "value='" + selectedRow._id + "'";
-                    sRuleName = "value='" + selectedRow.rulename + "'";
+                    sRuleName = "value='" + selectedRow.ruleName + "'";
                     sRemark = "<select style='width:300px' id='selRemark'>";
                     for (var i = 0; i < typeInfo_config.length; i++) {
                         sRemark += "<option value='" + typeInfo_config[i].pbotype + "'>" + typeInfo_config[i].pbotypename + "</option>";
@@ -621,7 +621,7 @@
             var sUrl = location.protocol + "//" + location.host + "/editxpath";
             that.SendAjaxReq4Json(sUrl, param, function (dataInfo) {
                 if (dataInfo != null) {
-                    rulename = dataInfo.ruleName;
+                    rulename = rulename;
                     allow_url = dataInfo.allow_url;
                     allow_domains = dataInfo.allowed_domains;
                     // extract_from = dataInfo.extract_from.replace(/\"/g, "&quot;");

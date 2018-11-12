@@ -620,7 +620,7 @@
             };
             var sUrl = location.protocol + "//" + location.host + "/editxpath";
             that.SendAjaxReq4Json(sUrl, param, function (dataInfo) {
-                if (dataInfo != null) {
+                if (dataInfo != "") {
                     rulename = rulename;
                     allow_url = dataInfo.allow_url;
                     allow_domains = dataInfo.allowed_domains;
@@ -685,7 +685,7 @@
                     var param = {};
                     var sUrl = location.protocol + "//" + location.host + "/editxpath";
                     //判断是否都填全了
-                    if (sRulename && sAllowdomains && sStarturls && sAllowurl && sExtractfrom && sTitlexpath && sDatetimexpath && sContentxpath) {
+                    if (sRulename && sAllowdomains && sStarturls && sTitlexpath && sDatetimexpath && sContentxpath) {
                         param = {
                             type: "EditXPath",
                             spidertype: sSpiderType,

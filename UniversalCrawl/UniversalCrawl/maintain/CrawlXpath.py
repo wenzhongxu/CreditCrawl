@@ -142,6 +142,7 @@ class CrawlXpath(object):
         }
         try:
             set_config(rulename, document)
+            return "ok"
         except Exception as e:
             raise e
         
@@ -152,7 +153,6 @@ class CrawlXpath(object):
         except Exception as e:
             raise e
 
-    @staticmethod
     def getxpathinfo(self):
         name = self.rulename
         config = get_config(name)
@@ -175,7 +175,7 @@ class CrawlXpath(object):
         elif self.opertype == "removexpath":
             return self.removexpath()
         elif self.opertype == "GetXpath":
-            return self.getxpathinfo(self)
+            return self.getxpathinfo()
         else:
             pass
     
@@ -195,3 +195,4 @@ class CrawlXpath(object):
             "msg": info
         }
         return jsonify(data)
+

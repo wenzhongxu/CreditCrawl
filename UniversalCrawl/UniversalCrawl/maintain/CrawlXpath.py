@@ -61,12 +61,8 @@ class CrawlXpath(object):
             "index": "http://tech.china.com/",
             # "start_urls": self.start_urls,
             "start_urls": {
-                "type": "dynamic",
-                "method": "china",
-                "args": [
-                    5,
-                    10
-                ]
+                "type": "static",
+                "value": self.start_urls
             },
             "allowed_domains": self.allow_domains,
             "rulename": self.rulename,
@@ -142,9 +138,9 @@ class CrawlXpath(object):
         }
         try:
             set_config(rulename, document)
-            return "ok"
+            return self.returnsuccessmsg("保存成功。")
         except Exception as e:
-            raise e
+            return self.returnerrmsg("保存失败：" + e)
         
     def removexpath(self):
         rulename = self.rulename

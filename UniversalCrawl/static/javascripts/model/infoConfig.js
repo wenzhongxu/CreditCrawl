@@ -43,30 +43,7 @@
                     },
                     onClick: function (event, treeId, treeNode, clickFlag) {
                         var sSite = treeNode.site;
-                        var gridObj = that.dataStore.gridObj;
-                        //如果存在站点信息，则获取该站点下相关配置的网址信息
-                        if (sSite) {
-                            var param = {
-                                type: "site",
-                                site: sSite
-                            };
-                            that.SendAjaxReq4Json(sUrl, param, function (dataInfo) {
-                                if (dataInfo.state == "ok") {
-                                    gridObj.datagrid('loadData', {
-                                        total: dataInfo.objList.length,
-                                        rows: dataInfo.objList
-                                    });
-                                } else {
-                                    alert(dataInfo.msg);
-                                }
-                            }, function (msgInfo) {
-                                var s = msgInfo;
-                            });
-                        }
-                        //如果非站点节点点击，则清空右边的网址信息
-                        else {
-                            gridObj.datagrid('loadData', []);
-                        }
+                        that.loadGridData(sSite);
                     }
                 }
             };
@@ -108,6 +85,34 @@
                 urlList.push(urlObj);
                 that.grap(urlList);
             });
+        },
+        loadGridData: function (sSite) {
+            var that = this;
+            var gridObj = that.dataStore.gridObj;
+            var sUrl = that.dataStore.ajaxUrl;
+            //如果存在站点信息，则获取该站点下相关配置的网址信息
+            if (sSite) {
+                var param = {
+                    type: "site",
+                    site: sSite
+                };
+                that.SendAjaxReq4Json(sUrl, param, function (dataInfo) {
+                    if (dataInfo.state == "ok") {
+                        gridObj.datagrid('loadData', {
+                            total: dataInfo.objList.length,
+                            rows: dataInfo.objList
+                        });
+                    } else {
+                        alert(dataInfo.msg);
+                    }
+                }, function (msgInfo) {
+                    var s = msgInfo;
+                });
+            }
+            //如果非站点节点点击，则清空右边的网址信息
+            else {
+                gridObj.datagrid('loadData', []);
+            }
         },
         /**
          * 新增分类
@@ -763,15 +768,23 @@
         formatAction: function (value, rowData, rowIndex) {
             var actionStr = '<a title="修改" href="javascript:void(0)" onClick="ModObj.EditXPath(\'' + rowIndex + '\')">修改配置</a> | ';
             if (rowData.isEnable == "0") {
-                actionStr += '<a title="开关" href="javascript:void(0)" onClick="ModObj.EditEnable(\'' + rowData + '\')">启用</a>';
+                actionStr += '<a title="开关" href="javascript:void(0)" onClick="ModObj.EditEnable(\'' + rowIndex + '\')">启用</a>';
             }
             else {
-                actionStr += '<a title="开关" href="javascript:void(0)" onClick="ModObj.EditEnable(\'' + rowData + '\')">禁用</a>';
+                actionStr += '<a title="开关" href="javascript:void(0)" onClick="ModObj.EditEnable(\'' + rowIndex + '\')">禁用</a>';
             }
             return actionStr;
         },
-        EditEnable: function (rowData) {
+        EditEnable: function (rowIndex) {
+            var that = this;
             var sUrl = location.protocol + "//" + location.host + "/config";
+            var gridObj = this.dataStore.gridObj;
+            var rowData = gridObj.datagrid('getRows')[rowIndex];
+            if (rowData.sisEnable == "1") {
+                rowData.sisEnable = "0";
+            } else {
+                rowData.sisEnable = "1";
+            }
             var param = {
                 type: "saveSite",
                 objInfo: {
@@ -786,7 +799,8 @@
                 }
             }
             that.SendAjaxReq4Json(sUrl, param, function (dataInfo) {
-                // 重载这一行数据或者修改是否启用状态
+                var sSite = rowData.site;
+                that.loadGridData(sSite);
             }, function (msg) {
                 alert(msg);
             }, '', false)

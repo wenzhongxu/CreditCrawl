@@ -9,6 +9,7 @@
 import pymongo
 from UniversalCrawl import settings
 from flask import jsonify
+from UniversalCrawl.utils import *
 
 
 class SiteInfoCateconfig(object):
@@ -121,9 +122,10 @@ class SiteInfoCateconfig(object):
         }
         try:
             info = db.siteInfo_config.update(param, {"$set": document}, upsert=True)
+            edit_config(self.ruleName, "isenable", self.isEnable)
             return self.returnsuccessmsg(document) if info['ok'] == 1.0 and info['n'] > 0 else self.returnerrmsg(info)
         except Exception as e:
-            raise e
+            raise e.message
 
     def removesite(self):
         client = pymongo.MongoClient(self.mongo_uri)
@@ -213,3 +215,4 @@ class SiteInfoCateconfig(object):
                 pass
         else:
             pass
+

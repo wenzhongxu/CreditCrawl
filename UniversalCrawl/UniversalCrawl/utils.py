@@ -35,6 +35,27 @@ def remove_config(name):
         os.remove(path)
 
 
+def edit_config(name, key, value):
+    path = dirname(realpath(__file__)) + '/configs/' + name + '.json'
+    key_ = key.split(".")
+    key_length = len(key_)
+    with open(path, 'rb') as f:
+        json_data = json.load(f)
+        i = 0
+        a = json_data
+        while i < key_length:
+            if i + 1 == key_length:
+                a[key_[i]] = value
+                i = i + 1
+            else:
+                a = a[key_[i]]
+                i = i + 1
+    f.close()
+    with open(path, 'w') as f:
+        json.dump(json_data, f)
+    f.close()
+
+
 if __name__ == '__main__':
     aa = get_config("zhanzhangzhijia")
     print aa

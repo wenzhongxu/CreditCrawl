@@ -626,6 +626,7 @@
                     allow_domains = dataInfo.allowed_domains;
                     // extract_from = dataInfo.extract_from.replace(/\"/g, "&quot;");
                     title_xpath = dataInfo.item.attrs.title[0].args[0].replace(/\"/g, "&quot;");
+                    srcurl_xpath = dataInfo.item.attrs.srcUrl[0].args[0].replace(/\"/g, "&quot;");
                     datetime_xpath = dataInfo.item.attrs.datetime[0].args[0].replace(/\"/g, "&quot;");
                     datetime_re = dataInfo.item.attrs.datetime[0].re;
                     // author_xpath = dataInfo.item.attrs.author[0].args.replace(/\"/g, "&quot;");

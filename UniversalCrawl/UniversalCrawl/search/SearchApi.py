@@ -66,3 +66,15 @@ def search(req):
         pass
     results = db[collectionname].find(queryparams).sort([('updatetime', -1)]).skip(skip).limit(limit)
     return jsonify(list(results))
+
+
+def getsite():
+    client = pymongo.MongoClient(settings.MONGO_URI)
+    db = client[settings.MONGO_DATABASE]
+    collectionname = "siteInfo_config"
+    queryparams = {}
+    queryparams['isEnable'] = "1"
+    results = db[collectionname].find(queryparams, {"_id": 0, "ruleName": 1})
+    return list(results)
+
+

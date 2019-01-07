@@ -13,6 +13,7 @@ from scrapy.utils.project import get_project_settings
 # from UniversalCrawl.spiders.Universal import UniversalSpider
 from utils import get_config
 from scrapy.crawler import CrawlerProcess
+from UniversalCrawl.search import SearchApi
 
 
 def run():
@@ -20,9 +21,11 @@ def run():
         names = [sys.argv[1]]
     else:
         crawlsites = getsite()
-        names = crawlsites
-    for name in names:
+    for crawlsite in crawlsites:
+        name = crawlsite["ruleName"]
         custom_settings = get_config(name)
+        if custom_settings == "":
+            continue
         spider = custom_settings.get('spider', 'Universal')
         project_settings = get_project_settings()
         settings = dict(project_settings.copy())
@@ -33,6 +36,9 @@ def run():
 
 
 def getsite():
+    # 应该是获取数据库中启用，且是通用爬虫的站点。而不是通过配置文件获取
+    results = SearchApi.getsite()
+
     rootdir = "./configs"  # 指明被遍历的文件夹
     sites = []
     # 三个参数：分别返回1.父目录 2.所有文件夹名字（不含路径） 3.所有文件名字
@@ -41,7 +47,7 @@ def getsite():
             index = filename.rfind('.')
             name = filename[:index]
             sites.append(name)
-    return sites
+    return results
 
 
 if __name__ == '__main__':

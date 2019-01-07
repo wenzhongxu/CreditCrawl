@@ -780,22 +780,24 @@
             var sUrl = location.protocol + "//" + location.host + "/config";
             var gridObj = this.dataStore.gridObj;
             var rowData = gridObj.datagrid('getRows')[rowIndex];
-            if (rowData.sisEnable == "1") {
-                rowData.sisEnable = "0";
+            if (rowData.isEnable == "1") {
+                rowData.isEnable = "0";
             } else {
-                rowData.sisEnable = "1";
+                rowData.isEnable = "1";
             }
             var param = {
                 type: "saveSite",
                 objInfo: {
-                    _id: rowData.sHref,
-                    src: rowData.sSrc,
-                    remark: rowData.sRemark,
-                    Summary: rowData.sSummary,
-                    site: rowData.sSite,
-                    siteName: rowData.sSiteName,
-                    IsFilter: rowData.sIsFilter,
-                    isEnable: rowData.sisEnable
+                    _id: rowData._id,
+                    src: rowData.src,
+                    remark: rowData.remark,
+                    Summary: rowData.Summary,
+                    site: rowData.site,
+                    siteName: rowData.siteName,
+                    IsFilter: rowData.IsFilter,
+                    isEnable: rowData.isEnable,
+                    isScreen: rowData.IsScreen,
+                    ruleName: rowData.ruleName
                 }
             }
             that.SendAjaxReq4Json(sUrl, param, function (dataInfo) {

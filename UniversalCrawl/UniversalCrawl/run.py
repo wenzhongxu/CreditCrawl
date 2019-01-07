@@ -24,7 +24,7 @@ def run():
     for crawlsite in crawlsites:
         name = crawlsite["ruleName"]
         custom_settings = get_config(name)
-        if custom_settings == "":
+        if custom_settings == "" or name is None:
             continue
         spider = custom_settings.get('spider', 'Universal')
         project_settings = get_project_settings()

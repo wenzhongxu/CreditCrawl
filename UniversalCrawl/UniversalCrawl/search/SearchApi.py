@@ -7,8 +7,11 @@
 # @Software: PyCharm
 
 import pymongo
-from UniversalCrawl import settings
+import sys
+import settings
 from flask import jsonify
+
+sys.path.append("..")
 
 '''
     搜索接口:http://localhost:5000/search?begdate=2017-08-09&type=list

@@ -13,12 +13,12 @@ from scrapy.utils.project import get_project_settings
 # from UniversalCrawl.spiders.Universal import UniversalSpider
 from utils import get_config
 from scrapy.crawler import CrawlerProcess
-from UniversalCrawl.search import SearchApi
+from search import SearchApi
 
 
 def run():
     if len(sys.argv) > 1:
-        names = [sys.argv[1]]
+        crawlsites = [sys.argv[1]]
     else:
         crawlsites = getsite()
     for crawlsite in crawlsites:

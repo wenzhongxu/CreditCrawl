@@ -7,11 +7,8 @@
 # @Software: PyCharm
 
 import pymongo
-import sys
-import settings
+from UniversalCrawl import settings
 from flask import jsonify
-
-sys.path.append("..")
 
 '''
     搜索接口:http://localhost:5000/search?begdate=2017-08-09&type=list
@@ -69,15 +66,5 @@ def search(req):
         pass
     results = db[collectionname].find(queryparams).sort([('updatetime', -1)]).skip(skip).limit(limit)
     return jsonify(list(results))
-
-
-def getsite():
-    client = pymongo.MongoClient(settings.MONGO_URI)
-    db = client[settings.MONGO_DATABASE]
-    collectionname = "siteInfo_config"
-    queryparams = {}
-    queryparams['isEnable'] = "1"
-    results = db[collectionname].find(queryparams, {"_id": 0, "ruleName": 1})
-    return list(results)
 
 

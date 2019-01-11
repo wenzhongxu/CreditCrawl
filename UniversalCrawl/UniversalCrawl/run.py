@@ -7,13 +7,12 @@
 # @Software: PyCharm
 
 import sys
-import os
-import os.path
 from scrapy.utils.project import get_project_settings
-# from UniversalCrawl.spiders.Universal import UniversalSpider
 from utils import get_config
 from scrapy.crawler import CrawlerProcess
-from search import SearchApi
+import pymongo
+import settings
+sys.path.append("../")
 
 
 def run():
@@ -36,18 +35,13 @@ def run():
 
 
 def getsite():
-    # 应该是获取数据库中启用，且是通用爬虫的站点。而不是通过配置文件获取
-    results = SearchApi.getsite()
-
-    rootdir = "./configs"  # 指明被遍历的文件夹
-    sites = []
-    # 三个参数：分别返回1.父目录 2.所有文件夹名字（不含路径） 3.所有文件名字
-    for parent, dirnames, filenames in os.walk(rootdir):
-        for filename in filenames:  # 输出文件信息
-            index = filename.rfind('.')
-            name = filename[:index]
-            sites.append(name)
-    return results
+    client = pymongo.MongoClient(settings.MONGO_URI)
+    db = client[settings.MONGO_DATABASE]
+    collectionname = "siteInfo_config"
+    queryparams = {}
+    queryparams['isEnable'] = "1"
+    results = db[collectionname].find(queryparams, {"_id": 0, "ruleName": 1})
+    return list(results)
 
 
 if __name__ == '__main__':

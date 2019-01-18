@@ -68,8 +68,6 @@ class CrawlXpath(object):
             "rulename": self.rulename,
             # "allow_url": self.allow_url,
             # "extract_from": self.extract_from,
-
-            "isfilter": self.isfilter,
             "isenable": self.isenable,
             "item": {
                 "class": "UniversalcrawlItem",
@@ -130,6 +128,14 @@ class CrawlXpath(object):
                             "method": "value",
                             "args": [
                                 self.sitename
+                            ]
+                        }
+                    ],
+                    "isfilter": [
+                        {
+                            "method": "value",
+                            "args": [
+                                self.isfilter
                             ]
                         }
                     ]

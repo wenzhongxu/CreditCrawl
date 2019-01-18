@@ -122,7 +122,7 @@ class SiteInfoCateconfig(object):
         }
         try:
             info = db.siteInfo_config.update(param, {"$set": document}, upsert=True)
-            # edit_config(self.ruleName, "isenable", self.isEnable)
+            edit_filter_config(self.ruleName, "isfilter", self.IsFilter)
             return self.returnsuccessmsg(document) if info['ok'] == 1.0 and info['n'] > 0 else self.returnerrmsg(info)
         except Exception as e:
             raise e.message

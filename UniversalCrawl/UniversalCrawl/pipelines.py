@@ -35,6 +35,7 @@ class UniversalcrawlPipeline(object):
             self.db.info_detail.insert(doc_or_docs=document, continue_on_error=True)
         except pymongo.errors.DuplicateKeyError:
             pass
+        print "--isfilter---" + document["isfilter"]
         if document["isfilter"] == "是" and myUtil.iscontainkeywords(document['_id']):
             try:
                 self.db.info_detail4email.insert(doc_or_docs=document, continue_on_error=True)

@@ -56,6 +56,17 @@ def edit_config(name, key, value):
     f.close()
 
 
+def edit_filter_config(name, value):
+    path = dirname(realpath(__file__)) + '/configs/' + name + '.json'
+    with open(path, 'rb') as f:
+        json_data = json.load(f)
+        a = json_data
+        a["item"]["attrs"]["isfilter"][0]["args"] = value
+    f.close()
+    with open(path, 'w') as f:
+        json.dump(json_data, f)
+    f.close()
+
+
 if __name__ == '__main__':
-    aa = get_config("zhanzhangzhijia")
-    print aa
+    edit_filter_config("zhanzhangzhijia", "否")

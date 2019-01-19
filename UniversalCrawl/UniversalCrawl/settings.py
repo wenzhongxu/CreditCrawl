@@ -64,13 +64,13 @@ DEFAULT_REQUEST_HEADERS = {
 # DOWNLOADER_MIDDLEWARES = {
 #    'UniversalCrawl.middlewares.UniversalcrawlDownloaderMiddleware': 543,
 # }
-DOWNLOADER_MIDDLEWARES = {
-    # 'UniversalCrawl.middlewares.MyCustomDownloaderMiddleware': 543,
-    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
-    'UniversalCrawl.middlewares.RandomUserAgent.RotateUserAgentMiddleware': 410,
-    # 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': None,
-    # 'UniversalCrawl.middlewares.RandomProxy.RandomProxy': 700,
-}
+# DOWNLOADER_MIDDLEWARES = {
+#     # 'UniversalCrawl.middlewares.MyCustomDownloaderMiddleware': 543,
+#     # 'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+#     # 'UniversalCrawl.middlewares.RandomUserAgent.RotateUserAgentMiddleware': 410,
+#     # 'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': None,
+#     # 'UniversalCrawl.middlewares.RandomProxy.RandomProxy': 700,
+# }
 
 # MONGO_URI = 'mongodb://127.0.0.1:27017,127.0.0.1:27018,127.0.0.1:27019'
 MONGO_URI = 'mongodb://localhost:27017/'
@@ -91,11 +91,11 @@ ITEM_PIPELINES = {
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
-AUTOTHROTTLE_ENABLED = True
+# AUTOTHROTTLE_ENABLED = True
 # The initial download delay
-AUTOTHROTTLE_START_DELAY = 5
+# AUTOTHROTTLE_START_DELAY = 5
 # The maximum download delay to be set in case of high latencies
-AUTOTHROTTLE_MAX_DELAY = 60
+# AUTOTHROTTLE_MAX_DELAY = 60
 # The average number of requests Scrapy should be sending in parallel to
 # each remote server
 # AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0
